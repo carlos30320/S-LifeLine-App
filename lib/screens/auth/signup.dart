@@ -23,18 +23,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
 
   DataStore ds = DataStore.getInstance();
-
+  
   showWelcomeDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
+        return  const Dialog(
+          insetPadding: EdgeInsets.all(4),
           elevation: 0,
-          child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40)),
-            height: double.infinity * 0.8,
-            child: WelcomeDialog(),
-          ),
+          child:  WelcomeDialog(),
         );
       },
     );

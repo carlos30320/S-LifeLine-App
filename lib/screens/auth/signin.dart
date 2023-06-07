@@ -57,13 +57,11 @@ class _SignInScreenState extends State<SignInScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return  Dialog(
+        return const Dialog(
+          insetAnimationDuration: Duration(milliseconds: 300),
+          insetPadding: EdgeInsets.all(4),
           elevation: 0,
-          child:  Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40)),
-            height: double.infinity * 0.8,
-            child:  WelcomeDialog(),
-          ),
+          child: WelcomeDialog(),
         );
       },
     );
@@ -72,7 +70,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     DataStore.isContactNew().then((value) async {
-      print(value);
       if (value == true) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           showWelcomeDialog();
@@ -93,7 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Logo(),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
