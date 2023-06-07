@@ -18,7 +18,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
   Future<void> _launchUrl() async {
     await launchUrl(Uri.parse(
         'https://studentlifeline.bigcartel.com/product/student-lifeline-alert-notification-app'));
-    GoRouter.of(context).go('/');
+    Navigator.of(context).pop();
     DataStore.setIsContactNew(false);
   }
 

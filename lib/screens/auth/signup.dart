@@ -23,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
 
   DataStore ds = DataStore.getInstance();
-  
+
   showWelcomeDialog() {
     showDialog(
       context: context,
@@ -101,13 +101,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'Sign up',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            'Sign up',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
                           ),
+                        ),
                           errorMessage != null
                               ? Padding(
                                   padding: EdgeInsets.all(10.0),

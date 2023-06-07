@@ -81,6 +81,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _sendSMS(String message, List<String> recipents) async {
     if (await Permission.sms.isGranted) {
+      if (recipents.isEmpty) {
+        Fluttertoast.showToast(
+            msg: "You have no number registered".toString(),
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red.shade900,
+            textColor: Colors.white,
+            fontSize: 14.0);
+        return;
+      }
       recipents.forEach((rec) async {
         SmsStatus result = await BackgroundSms.sendMessage(
             phoneNumber: rec, message: message, simSlot: 1);
@@ -118,14 +129,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-  
-        checkAuthStatus().then((value) async {
-          await requestSmsPermission();
-          await getCurrentLocation();
-          _liveLocation();
-        }).catchError((err) => GoRouter.of(context).go('/signin'));
-        super.initState();
-      }
+    checkAuthStatus().then((value) async {
+      await requestSmsPermission();
+      await getCurrentLocation();
+      _liveLocation();
+    }).catchError((err) => GoRouter.of(context).go('/signin'));
+    super.initState();
+  }
 
   Future showPic(String pic) => showDialog(
       context: context,
@@ -177,30 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //       border: Border(
-                  //           bottom: BorderSide(
-                  //               width: 1,
-                  //               color: Colors.blueGrey.withOpacity(0.1)))),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.symmetric(
-                  //         vertical: 24.0, horizontal: 10),
-                  //     child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         children: [
-                  //           const Text(
-                  //             'Home',
-                  //             style: TextStyle(
-                  //                 fontSize: 18, fontWeight: FontWeight.w700),
-                  //           ),
-                  //           IconButton(
-                  //               onPressed: () =>
-                  //                   GoRouter.of(context).go('/phonebook'),
-                  //               icon: const Icon(Icons.people_outlined))
-                  //         ]),
-                  //   ),
-                  // ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CarouselSlider(
@@ -226,16 +212,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Colors.white),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(4),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: Image.asset(e),
+                                      child: Image.asset(
+                                        e,
+                                        fit: BoxFit.cover,
                                       ),
                                     )),
                               ),
                             )
                             .toList(),
                         options: CarouselOptions(
-                            height: 260, animateToClosest: true)),
+                            height: 340, animateToClosest: true)),
                   ),
                   const SizedBox(
                     height: 6,
@@ -300,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(50),
                       color: Colors.red.shade100.withOpacity(0.5),
                     ),
                     child: SizedBox(

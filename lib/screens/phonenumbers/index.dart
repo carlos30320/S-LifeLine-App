@@ -226,35 +226,43 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
                 //         ]),
                 //   ),
                 // ),
-                isLoading ?
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(30.0),
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.blueGrey,
-                        strokeWidth: 1,
-                      ),
-                    ),
-                  ),
-                )
-                :
-                Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: ds.phoneNumbers.length,
-                      itemBuilder: (_, i) {
-                        return Contact(
-                            delete: delete,
-                            key: ObjectKey(ds.phoneNumbers.elementAt(i)),
-                            id: ds.phoneNumbers.elementAt(i).id!,
-                            contact: ds.phoneNumbers.elementAt(i).phonenumber,
-                            name: ds.phoneNumbers.elementAt(i).name);
-                      },
-                    )),
+                isLoading
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(30.0),
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.blueGrey,
+                              strokeWidth: 1,
+                            ),
+                          ),
+                        ),
+                      )
+                    : ds.phoneNumbers.isEmpty
+                        ? const Text(
+                            "You don't have any number registered yet",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ds.phoneNumbers.length,
+                              itemBuilder: (_, i) {
+                                return Contact(
+                                    delete: delete,
+                                    key:
+                                        ObjectKey(ds.phoneNumbers.elementAt(i)),
+                                    id: ds.phoneNumbers.elementAt(i).id!,
+                                    contact: ds.phoneNumbers
+                                        .elementAt(i)
+                                        .phonenumber,
+                                    name: ds.phoneNumbers.elementAt(i).name);
+                              },
+                            )),
                 Container(
                     child: canAddMoreusers
                         ? FloatingActionButton(

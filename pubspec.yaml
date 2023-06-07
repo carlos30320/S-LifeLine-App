@@ -12,7 +12,7 @@ dependencies:
   carousel_slider : ^4.2.1
   geolocator: ^9.0.2
   cupertino_icons: ^1.0.2
-  google_fonts : ^3.0.0
+  google_fonts : 
   shared_preferences: ^2.1.1
   flutter_sms : ^2.3.3
   intl_phone_number_input : ^0.7.3
