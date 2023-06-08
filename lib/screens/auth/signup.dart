@@ -58,7 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('access_token', res.data['token']);
         prefs.setString('username', res.data['username']);
-        GoRouter.of(context).go('/');
+        GoRouter.of(context).go('/home');
       }
       setState(() {
         isLoading = false;
@@ -102,22 +102,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           const Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            'Sign up',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'Sign up',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                           errorMessage != null
                               ? Padding(
                                   padding: EdgeInsets.all(10.0),
-                                  child: Text(
-                                    errorMessage!,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      errorMessage!,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red),
+                                    ),
                                   ),
                                 )
                               : const SizedBox(

@@ -34,6 +34,7 @@ class ApiClient {
           "password": password.toString()
         }),
         headers: {'Content-Type': 'application/json'});
+    print(res);
     return Response.fromJson(jsonDecode(res.body));
   }
 
@@ -67,5 +68,4 @@ class ApiClient {
     });
     return Response.fromJson(jsonDecode(res.body));
   }
-
 }

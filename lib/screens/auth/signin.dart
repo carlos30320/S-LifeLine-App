@@ -40,12 +40,13 @@ class _SignInScreenState extends State<SignInScreen> {
         prefs.setString('access_token', res.data['token']);
         prefs.setString('username', res.data['username']);
         // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/');
+        GoRouter.of(context).go('/home');
       }
       setState(() {
         isLoading = false;
       });
     } catch (e) {
+      print(e);
       setState(() {
         isLoading = false;
         errorText = "Something went wrong";

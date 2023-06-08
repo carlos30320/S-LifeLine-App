@@ -2,6 +2,7 @@ import 'package:american_student_book/components/welcomeDialog.dart';
 import 'package:american_student_book/config/theme.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
 import 'package:american_student_book/screens/auth/signup.dart';
+import 'package:american_student_book/screens/home.dart';
 import 'package:american_student_book/screens/index.dart';
 import 'package:american_student_book/screens/phonenumbers/index.dart';
 import 'package:american_student_book/store/store.dart';
@@ -37,17 +38,10 @@ class MyApp extends StatelessWidget {
     GoRoute(
       path: '/',
       builder: (context, state)  => const HomeScreen()
-      //   bool? isUserNew;
-      //   DataStore.isContactNew().then((value) {
-      //     print(value);
-      //     isUserNew = value;
-      //   if (isUserNew == false) {
-      //     return const WelcomeDialog();
-      //   } else {
-      //     return const HomeScreen();
-      //   }
-      //   });
-      // },
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state)  => const HomeScreen()
     ),
     GoRoute(
       path: '/signin',

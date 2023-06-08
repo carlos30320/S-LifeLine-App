@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await requestSmsPermission();
       await getCurrentLocation();
       _liveLocation();
-    }).catchError((err) => GoRouter.of(context).go('/signin'));
+    });
     super.initState();
   }
 
@@ -187,42 +187,34 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CarouselSlider(
-                        items: [
-                          "assets/001.png",
-                          'assets/002.png',
-                          'assets/003.png',
-                          'assets/004.png',
-                          'assets/005.png',
-                          'assets/006.png',
-                        ]
-                            .map(
-                              (e) => ElevatedButton(
-                                style: const ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll(Colors.white)),
-                                onPressed: () => showPic(e),
-                                child: Container(
-                                    width: double.infinity,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 1),
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: Image.asset(
-                                        e,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
+                  CarouselSlider(
+                    
+                      items: [
+                        "assets/001.png",
+                        'assets/002.png',
+                        'assets/003.png',
+                        'assets/004.png',
+                        'assets/005.png',
+                        'assets/006.png',
+                      ]
+                          .map(
+                            (e) => ElevatedButton(
+                              style: const ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(Colors.white)),
+                              onPressed: () => showPic(e),
+                              child: Expanded(
+                                child: Image.asset(
+                                  e,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            )
-                            .toList(),
-                        options: CarouselOptions(
-                            height: 340, animateToClosest: true)),
-                  ),
+                            ),
+                          )
+                          .toList(),
+                      options: CarouselOptions(
+                          height: 340, animateToClosest: true)),
                   const SizedBox(
                     height: 6,
                   ),
