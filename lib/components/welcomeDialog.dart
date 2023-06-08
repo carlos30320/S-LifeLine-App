@@ -70,7 +70,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                     ),
                   ),
                   Text(
-                    '''Student Lifeline® now provides the app that your son or daughter may download and reach up to three (3) contacts in the event of any possible compromising situation 24/7 for only one dollar  a month /USD12 annually. The Student Lifeline® alert notification app can   bring peace of mind if the need to reach three personal contacts   arises. This app does not replace a need to report a possible crime,   fire, or medical emergency that is provided by direct contact or, if   available, the 911 hotline system in the US and Canada. This alert system  is available worldwide. Scan the app today for immediate usage. Student  Lifeline® has been in the business of providing emergency transportation to stranded youth since 1988, and is proud to offer this new alert system  to any individual who may require this service, regardless of age.''',
+                    '''Subscribe to one of America's most efficient. and reasonably priced Emergency Alert Systems that can save a loved one from the worry of being alone when in trouble, without a means to reach out to those who care most for their well being and safety, only 12.00USD a year, instantly alerts up to three contacts simultaneously...subscribe below: ''',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         fontSize: 16, color: Colors.black.withOpacity(0.7)),
