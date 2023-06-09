@@ -28,10 +28,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return  const Dialog(
+        return const Dialog(
           insetPadding: EdgeInsets.all(4),
           elevation: 0,
-          child:  WelcomeDialog(),
+          child: WelcomeDialog(),
         );
       },
     );
@@ -58,7 +58,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('access_token', res.data['token']);
         prefs.setString('username', res.data['username']);
-        GoRouter.of(context).go('/home');
+        prefs.setBool('isActivated', res.data['isActivated']);
+        if (res.data['isActivated'] == false) {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/welcome');
+        } else {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/home');
+        }
       }
       setState(() {
         isLoading = false;
@@ -74,11 +81,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    DataStore.isContactNew().then((value) {
-      if (value == true) {
-        showWelcomeDialog();
-      }
-    });
   }
 
   Widget build(BuildContext context) {
@@ -101,17 +103,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              'Sign up',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            padding: EdgeInsets.all(10.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                'Sign up',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
                           errorMessage != null
                               ? Padding(
                                   padding: EdgeInsets.all(10.0),

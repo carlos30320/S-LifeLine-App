@@ -2,6 +2,7 @@ import 'package:american_student_book/components/welcomeDialog.dart';
 import 'package:american_student_book/config/theme.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
 import 'package:american_student_book/screens/auth/signup.dart';
+import 'package:american_student_book/screens/auth/subscription.dart';
 import 'package:american_student_book/screens/home.dart';
 import 'package:american_student_book/screens/index.dart';
 import 'package:american_student_book/screens/phonenumbers/index.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
     ),
     GoRoute(
       path: '/welcome',
-      builder: (context, state) => const WelcomeDialog(),
+      builder: (context, state) => const SubscribePage(),
     ),
     GoRoute(
       path: '/signup',

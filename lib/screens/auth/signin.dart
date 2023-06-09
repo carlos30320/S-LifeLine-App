@@ -38,8 +38,14 @@ class _SignInScreenState extends State<SignInScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('access_token', res.data['token']);
         prefs.setString('username', res.data['username']);
+        prefs.setBool('isActivate', res.data['isActivated']);
+        if (res.data['isActivated'] == false) {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/welcome');
+        }else{
         // ignore: use_build_context_synchronously
         GoRouter.of(context).go('/home');
+        }
       }
       setState(() {
         isLoading = false;
@@ -69,13 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    DataStore.isContactNew().then((value) async {
-      if (value == true) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showWelcomeDialog();
-        });
-      }
-    });
+
     super.initState();
   }
 

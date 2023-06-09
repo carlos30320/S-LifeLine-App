@@ -1,8 +1,7 @@
 import 'package:american_student_book/store/store.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:american_student_book/components/logo.dart';
 
 class WelcomeDialog extends StatefulWidget {
@@ -17,14 +16,12 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
 
   Future<void> _launchUrl() async {
     await launchUrl(Uri.parse(
-        'https://studentlifeline.bigcartel.com/product/student-lifeline-alert-notification-app'));
-    Navigator.of(context).pop();
+    'https://studentlifeline.bigcartel.com/product/student-lifeline-alert-notification-app'));
     DataStore.setIsContactNew(false);
   }
 
   @override
   void initState() {
-    print("Mounted Welcome Dialog in the Interface");
     super.initState();
   }
 
@@ -105,7 +102,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                           backgroundColor:
                               MaterialStatePropertyAll(Colors.transparent),
                           elevation: MaterialStatePropertyAll(0)),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () =>  SystemNavigator.pop(),
                       child: const Padding(
                           padding: EdgeInsets.only(top: 18, bottom: 18),
                           child: Text(
