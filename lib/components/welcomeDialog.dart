@@ -33,12 +33,13 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 14.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(width: 50, height: 50, child: Logo()),
+                    SizedBox(width: 10),
                     Text(
                       'Student Lifeline',
                       textAlign: TextAlign.center,
@@ -51,19 +52,23 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                   ],
                 ),
               ),
-              Image.asset('assets/bannerImg.png'),
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Image.asset('assets/bannerImg.png'),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Column(children: [
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14.0),
                     child: Text(
                       'HELP SAVE YOUR KIDS FROM POSSIBLE DANGER BY PROVIDING THEM WITH THE APP THAT WILL REACH YOU 24/7',
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 16,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Text(
@@ -73,7 +78,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                         fontSize: 16, color: Colors.black.withOpacity(0.7)),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
