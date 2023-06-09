@@ -5,7 +5,6 @@ import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../store/store.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -203,9 +202,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ButtonStyle(
+                    style: const ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(Colors.red),
-                        elevation: const MaterialStatePropertyAll(0)),
+                        elevation: MaterialStatePropertyAll(0)),
                     onPressed: () => submit(),
                     child: Padding(
                       padding: const EdgeInsets.only(top: 18, bottom: 18),
