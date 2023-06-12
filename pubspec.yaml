@@ -9,18 +9,18 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: 7.1.1
-  carousel_slider : ^4.2.1
+  carousel_slider: ^4.2.1
   geolocator: ^9.0.2
   cupertino_icons: ^1.0.2
-  google_fonts : ^3.0.0
+  google_fonts: ^5.0.0
   shared_preferences: ^2.1.1
-  flutter_sms : ^2.3.3
-  intl_phone_number_input : ^0.7.3
+  flutter_sms: ^2.3.3
+  intl_phone_number_input: ^0.7.3
   http:
   permission_handler:
-  phone_number: 
+  phone_number:
   background_sms:
-  fluttertoast: 
+  fluttertoast:
   google_maps_flutter:
   url_launcher: 
   flutter_paypal:
