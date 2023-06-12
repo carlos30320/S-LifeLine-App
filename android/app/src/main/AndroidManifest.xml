@@ -33,6 +33,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                android:scheme="[YOUR_SCHEME]"
+                android:host="[YOUR_HOST]" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.SENDTO"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="smsto"/>

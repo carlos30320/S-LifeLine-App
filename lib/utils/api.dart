@@ -68,4 +68,20 @@ class ApiClient {
     });
     return Response.fromJson(jsonDecode(res.body));
   }
+
+  static Future<Response> subscribeForAYear() async {
+    var res = await client.put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
+      'Authorization':
+          '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+    });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+  
+  static Future<Response> unsubscribe() async {
+    var res = await client.put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
+      'Authorization':
+          '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+    });
+    return Response.fromJson(jsonDecode(res.body));
+  }
 }

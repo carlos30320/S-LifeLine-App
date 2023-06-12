@@ -1,6 +1,12 @@
 import 'package:american_student_book/store/store.dart';
+import 'package:american_student_book/utils/api.dart';
+import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:american_student_book/components/logo.dart';
 
@@ -13,12 +19,6 @@ class WelcomeDialog extends StatefulWidget {
 
 class _WelcomeDialogState extends State<WelcomeDialog> {
   bool? isNewUser;
-
-  Future<void> _launchUrl() async {
-    await launchUrl(Uri.parse(
-    'https://studentlifeline.bigcartel.com/product/student-lifeline-alert-notification-app'));
-    DataStore.setIsContactNew(false);
-  }
 
   @override
   void initState() {
@@ -84,11 +84,87 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.red),
                             elevation: MaterialStatePropertyAll(0)),
-                        onPressed: _launchUrl,
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => UsePaypal(
+                                  sandboxMode: true,
+                                  clientId:
+                                      "AQqdXPQ3rsswW2UJljkczMP7uoSUqrwVOK8cjLyf6LfFbF1iV1vcyTLQOiWidshC2tmSFcOUOCPyecof",
+                                  secretKey:
+                                      "EAi5rs88yS1W_1Jq1DBUYQakMWyFgxk3QIlBiHIaSgGcndYTv9FR84l_iiOyE_SSiESadJv8l9tQZjN9",
+                                  returnURL: "https://samplesite.com/return",
+                                  cancelURL: "https://samplesite.com/cancel",
+                                  transactions: const [
+                                    {
+                                      "amount": {
+                                        "total": '12.0',
+                                        "currency": "USD",
+                                        "details": {
+                                          "subtotal": '12.00',
+                                          "shipping": '0',
+                                          "shipping_discount": 0
+                                        }
+                                      },
+                                      "description":
+                                          "Subscription to Student Lifeline",
+                                      // "payment_options": {
+                                      //   "allowed_payment_method":
+                                      //       "INSTANT_FUNDING_SOURCE"
+                                      // },
+                                    }
+                                  ],
+                                  note:
+                                      "Contact us for any questions on your order.",
+                                  onSuccess: (Map params) async {
+                                    print("onSuccess: $params");
+                                    Response res =
+                                        await ApiClient.subscribeForAYear();
+                                    if (res.success == true) {
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      prefs.setBool('isActivated', true);
+                                      GoRouter.of(context).go('/home');
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "You subsscribed for a year"
+                                              .toString(),
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red.shade900,
+                                          textColor: Colors.white,
+                                          fontSize: 14.0);
+                                    }
+                                  },
+                                  onError: (error) {
+                                    Fluttertoast.showToast(
+                                        msg: "Something went wrong".toString(),
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red.shade900,
+                                        textColor: Colors.white,
+                                        fontSize: 14.0);
+                                    print("onError: $error");
+                                  },
+                                  onCancel: (params) {
+                                    Fluttertoast.showToast(
+                                        msg: "Action cancelled".toString(),
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red.shade900,
+                                        textColor: Colors.white,
+                                        fontSize: 14.0);
+                                  }),
+                            ),
+                          )
+                        },
                         child: Padding(
                             padding: const EdgeInsets.only(top: 18, bottom: 18),
                             child: Text(
-                              'Go to subscription'.toUpperCase(),
+                              'Pay with paypal'.toUpperCase(),
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             )),
@@ -102,11 +178,11 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                           backgroundColor:
                               MaterialStatePropertyAll(Colors.transparent),
                           elevation: MaterialStatePropertyAll(0)),
-                      onPressed: () =>  SystemNavigator.pop(),
+                      onPressed: () => SystemNavigator.pop(),
                       child: const Padding(
                           padding: EdgeInsets.only(top: 18, bottom: 18),
                           child: Text(
-                            'Close ',
+                            'Close App ',
                             style: TextStyle(
                                 color: Colors.black87,
                                 fontSize: 14,
