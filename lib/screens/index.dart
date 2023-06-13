@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String location = "Detecting location...";
   String log = "Your membership will end on 25th July";
   DataStore ds = DataStore.getInstance();
+  // ignore: unused_field
   final Completer<GoogleMapController> _controller = Completer();
   bool smsPermitted = false;
   bool locationPermitted = false;

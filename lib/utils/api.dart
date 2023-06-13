@@ -38,6 +38,29 @@ class ApiClient {
     return Response.fromJson(jsonDecode(res.body));
   }
 
+  static Future<Response> verifyEmail(String verificationCode) async {
+    var res = await client.post(Uri.https(baseUrl, 'auth/verifyEmail'),
+        body: jsonEncode({
+          "verificationCode": verificationCode.toString(),
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+        });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
+  static Future<Response> resendVerificationCode() async {
+    var res = await client.get(Uri.https(baseUrl, 'auth/resendVerificationCode'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+        });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
   static Future<Response> addContact(String name, String phoneNumber) async {
     var res = await client.post(Uri.https(baseUrl, 'contacts/new'),
         body: jsonEncode(
@@ -47,7 +70,6 @@ class ApiClient {
           'Authorization':
               '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
         });
-
     return Response.fromJson(jsonDecode(res.body));
   }
 
@@ -70,15 +92,17 @@ class ApiClient {
   }
 
   static Future<Response> subscribeForAYear() async {
-    var res = await client.put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
+    var res = await client
+        .put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
     });
     return Response.fromJson(jsonDecode(res.body));
   }
-  
+
   static Future<Response> unsubscribe() async {
-    var res = await client.put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
+    var res = await client
+        .put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
     });

@@ -59,13 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         prefs.setString('access_token', res.data['token']);
         prefs.setString('username', res.data['username']);
         prefs.setBool('isActivated', res.data['isActivated']);
-        if (res.data['isActivated'] == false) {
-          // ignore: use_build_context_synchronously
-          GoRouter.of(context).go('/welcome');
-        } else {
-          // ignore: use_build_context_synchronously
-          GoRouter.of(context).go('/home');
-        }
+          GoRouter.of(context).go('/verifyEmail');
       }
       setState(() {
         isLoading = false;

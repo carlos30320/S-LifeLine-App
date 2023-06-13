@@ -21,7 +21,11 @@ class _HomeState extends State<Home> {
     super.initState();
     checkAuthStatus().then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (prefs.getBool('isActivated') == false ||
+      if (prefs.getBool('isVerified') == false ||
+          prefs.getBool('isVerified') == null) {
+        // ignore: use_build_context_synchronously
+        GoRouter.of(context).push('/verifyEmail');
+      } else if (prefs.getBool('isActivated') == false ||
           prefs.getBool('isActivated') == null) {
         // ignore: use_build_context_synchronously
         GoRouter.of(context).push('/welcome');

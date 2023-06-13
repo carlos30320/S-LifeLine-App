@@ -3,6 +3,7 @@ import 'package:american_student_book/config/theme.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
 import 'package:american_student_book/screens/auth/signup.dart';
 import 'package:american_student_book/screens/auth/subscription.dart';
+import 'package:american_student_book/screens/auth/verifyEmail.dart';
 import 'package:american_student_book/screens/home.dart';
 import 'package:american_student_book/screens/index.dart';
 import 'package:american_student_book/screens/phonenumbers/index.dart';
@@ -59,6 +60,10 @@ class MyApp extends StatelessWidget {
     GoRoute(
       path: '/phonebook',
       builder: (context, state) => const PhoneNumbers(),
+    ),
+    GoRoute(
+      path: '/verifyEmail',
+      builder: (context, state) => const VerifyEmailScreen(),
     ),
   ]);
 

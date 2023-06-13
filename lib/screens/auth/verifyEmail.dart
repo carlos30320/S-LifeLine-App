@@ -5,18 +5,15 @@ import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../store/store.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class VerifyEmailScreen extends StatefulWidget {
+  const VerifyEmailScreen({super.key});
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  final _verificationCodeController = TextEditingController();
   bool isLoading = false;
 
   String? errorText;
@@ -28,25 +25,16 @@ class _SignInScreenState extends State<SignInScreen> {
         isLoading = true;
       });
 
-      Response res = await ApiClient.signIn(
-          _emailController.value.text, _passwordController.value.text);
+      Response res =
+          await ApiClient.verifyEmail(_verificationCodeController.value.text);
       if (res.success != true) {
         setState(() {
           errorText = res.message;
         });
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('access_token', res.data['token']);
-        prefs.setString('username', res.data['username']);
-        prefs.setBool('isActivate', res.data['isActivated']);
-        prefs.setBool('isVerified', res.data['isVerified']);
-        if (res.data['isActivated'] == false) {
-          // ignore: use_build_context_synchronously
-          GoRouter.of(context).go('/welcome');
-        }else{
-        // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/home');
-        }
+        prefs.setBool('isVerified', true);
+        GoRouter.of(context).go('/signin');
       }
       setState(() {
         isLoading = false;
@@ -60,23 +48,28 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  showWelcomeDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const Dialog(
-          insetAnimationDuration: Duration(milliseconds: 300),
-          insetPadding: EdgeInsets.all(4),
-          elevation: 0,
-          child: WelcomeDialog(),
-        );
-      },
-    );
-  }
+  void resendCode()  async {
+    try {
+      if (isLoading) return;
+      setState(() {
+        errorText = null;
+        isLoading = true;
+      });
 
+      Response res = await ApiClient.resendVerificationCode();
+      if (res.success != true) {
+        setState(() {
+          errorText = res.message;
+        });
+      }
+    }
+    catch (e) {
+      print(e);
+    }
+  
+  }
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -104,11 +97,22 @@ class _SignInScreenState extends State<SignInScreen> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            'Sign in',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Verify your email address',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'We have sent you an email with a verification code. Please enter it below to verify your email address.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         errorText != null
@@ -132,7 +136,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               padding: const EdgeInsets.only(
                                   bottom: 4, top: 6, left: 10),
                               child: Text(
-                                'Email address',
+                                'Verification code',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(0.8),
                                     fontSize: 14),
@@ -142,7 +147,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: TextField(
-                                  controller: _emailController,
+                                  controller: _verificationCodeController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                       filled: true,
@@ -151,40 +156,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       contentPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 12),
-                                      hintText: 'john@doe.com',
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none)),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: 4, top: 6, left: 10),
-                              child: Text(
-                                'Password',
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.8),
-                                    fontSize: 14),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: TextField(
-                                  obscureText: true,
-                                  controller: _passwordController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor:
-                                          Colors.blueGrey.withOpacity(0.1),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 12),
-                                      hintText: '***********',
+                                      hintText: 'Enter verification code',
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none)),
                             ),
@@ -211,7 +183,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       padding: const EdgeInsets.only(top: 18, bottom: 18),
                       child: !isLoading
                           ? const Text(
-                              'Sign in',
+                              'Verify email',
                               style: TextStyle(fontSize: 14),
                             )
                           : const SizedBox(
@@ -234,11 +206,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     style: const ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(Colors.white),
                         elevation: MaterialStatePropertyAll(0)),
-                    onPressed: () => GoRouter.of(context).go('/signup'),
+                    onPressed: () => resendCode(),
                     child: Padding(
                       padding: const EdgeInsets.only(top: 18, bottom: 18),
                       child: Text(
-                        "I don't have an account",
+                        "resend code",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.red.shade600,
