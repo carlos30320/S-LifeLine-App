@@ -16,5 +16,5 @@ final ThemeData globalTheme = ThemeData(
         surface: Colors.blueGrey.withOpacity(0.4)
         ),
     primaryColor: Colors.blueGrey.withOpacity(0.4),
-    textTheme: GoogleFonts.poppinsTextTheme(),
+    // textTheme: GoogleFonts.poppinsTextTheme(),
     scaffoldBackgroundColor: Colors.white);
