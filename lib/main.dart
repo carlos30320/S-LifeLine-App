@@ -1,4 +1,5 @@
 import 'package:american_student_book/screens/success.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
@@ -109,6 +110,12 @@ class MyApp extends StatelessWidget {
         successMessage: "Payment Successful",
       );
     } else {
+      // Fluttertoast.showToast(
+      //     msg: "Payment Failed",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     fontSize: 16.0);
       initialScreen = const Home();
     }
 
