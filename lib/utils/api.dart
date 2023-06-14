@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient {
-  static String baseUrl = "https://student-lifeline.onrender.com";
+  static String baseUrl = "student-lifeline.onrender.com";
   static var client = http.Client();
   static DataStore ds = DataStore.getInstance();
   static Future<Response> SignUp(String username, String email, String password,
@@ -52,12 +52,12 @@ class ApiClient {
   }
 
   static Future<Response> resendVerificationCode() async {
-    var res = await client.get(Uri.https(baseUrl, 'auth/resendVerificationCode'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
-        });
+    var res = await client
+        .get(Uri.https(baseUrl, 'auth/resendVerificationCode'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization':
+          '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+    });
     return Response.fromJson(jsonDecode(res.body));
   }
 

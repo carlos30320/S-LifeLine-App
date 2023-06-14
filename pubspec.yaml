@@ -22,10 +22,9 @@ dependencies:
   background_sms:
   fluttertoast:
   google_maps_flutter:
-  url_launcher: 
+  url_launcher:
   flutter_paypal: 0.2.0
   uni_links:
-
 
 dev_dependencies:
   flutter_test:
