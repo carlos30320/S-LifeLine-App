@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient {
-  static String baseUrl = "asb-api.onrender.com";
+  static String baseUrl = "https://student-lifeline.onrender.com";
   static var client = http.Client();
   static DataStore ds = DataStore.getInstance();
   static Future<Response> SignUp(String username, String email, String password,
