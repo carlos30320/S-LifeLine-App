@@ -10,12 +10,27 @@
 <key>NSSMSMessageUsageDescription</key>
 <string>This app needs permission to send SMS in background</string>
 <dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+	    <string>NSUserActivityTypeBrowsingWeb</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+	    <dict>
+	        <key>CFBundleURLName</key>
+	        <string>com.example.american_student_book</string>
+	        <key>CFBundleURLSchemes</key>
+	        <array>
+	            <string>studentLifeline</string>
+	        </array>
+	    </dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Student lifeline</string>
 	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
+	<string>$(EXECUTABLE_NAME)</string>	
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

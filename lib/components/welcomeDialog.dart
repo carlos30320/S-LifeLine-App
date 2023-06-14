@@ -93,8 +93,8 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                       "AQqdXPQ3rsswW2UJljkczMP7uoSUqrwVOK8cjLyf6LfFbF1iV1vcyTLQOiWidshC2tmSFcOUOCPyecof",
                                   secretKey:
                                       "EAi5rs88yS1W_1Jq1DBUYQakMWyFgxk3QIlBiHIaSgGcndYTv9FR84l_iiOyE_SSiESadJv8l9tQZjN9",
-                                  returnURL: "https://samplesite.com/return",
-                                  cancelURL: "https://samplesite.com/cancel",
+                                  returnURL: "studentLifeline://payment-complete",
+                                  cancelURL: "studentLifeline://payment-cancelled",
                                   transactions: const [
                                     {
                                       "amount": {
