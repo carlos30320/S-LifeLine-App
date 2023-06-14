@@ -1,5 +1,6 @@
-import 'package:american_student_book/components/welcomeDialog.dart';
-import 'package:american_student_book/config/theme.dart';
+import 'package:american_student_book/screens/success.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
 import 'package:american_student_book/screens/auth/signup.dart';
 import 'package:american_student_book/screens/auth/subscription.dart';
@@ -28,23 +29,47 @@ void requestPermissionsAndRunApp() async {
   }
 }
 
+void handleDeepLink(Uri uri) {
+  if (uri.pathSegments.isNotEmpty) {
+    if (uri.path == '/payment-complete') {
+      SharedPreferences.getInstance().then((value) {
+        value.setBool('isActivated', true).then((_) {
+          runApp(MyApp(paymentSuccess: true));
+        });
+      });
+    } else if (uri.path == '/payment-failed') {
+      SharedPreferences.getInstance().then((value) {
+        value.setBool('isActivated', false).then((_) {
+          runApp(MyApp(paymentSuccess: false));
+        });
+      });
+    }
+  }
+}
+
+void initUniLinks() async {
+  try {
+    Uri? initialUri = await getInitialUri();
+    handleDeepLink(initialUri!);
+    uriLinkStream.listen((uri) {
+      handleDeepLink(uri!);
+    });
+  } on PlatformException {
+    SystemNavigator.pop();
+  }
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   requestPermissionsAndRunApp();
+  initUniLinks();
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  DataStore ds = DataStore.getInstance();
-  GoRouter router = GoRouter(routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state)  => const Home()
-    ),
-    GoRoute(
-      path: '/home',
-      builder: (context, state)  => const HomeScreen()
-    ),
+// ignore: non_constant_identifier_names
+GoRouter buildRouter(Widget InitialScreen) {
+  return GoRouter(routes: [
+    GoRoute(path: '/', builder: (context, state) => InitialScreen),
+    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: '/signin',
       builder: (context, state) => const SignInScreen(),
@@ -66,14 +91,30 @@ class MyApp extends StatelessWidget {
       builder: (context, state) => const VerifyEmailScreen(),
     ),
   ]);
+}
+
+// ignore: must_be_immutable
+class MyApp extends StatelessWidget {
+  bool? paymentSuccess;
+
+  MyApp({Key? key, this.paymentSuccess}) : super(key: key);
+
+  DataStore ds = DataStore.getInstance();
 
   @override
   Widget build(BuildContext context) {
+    Widget initialScreen;
+    if (paymentSuccess == true) {
+      initialScreen = const SuccessScreen(
+        successMessage: "Payment Successful",
+      );
+    } else {
+      initialScreen = const Home();
+    }
+
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: globalTheme,
-      routerConfig: router,
-      color: Colors.white,
-    );
+        // ...
+        routerConfig: buildRouter(initialScreen),
+        color: Colors.white);
   }
 }

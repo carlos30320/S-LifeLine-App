@@ -37,8 +37,8 @@
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                android:scheme="[YOUR_SCHEME]"
-                android:host="[YOUR_HOST]" />
+                android:scheme="studentLifeline"
+                android:host="payment-complete" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SENDTO"/>
