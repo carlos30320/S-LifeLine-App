@@ -33,11 +33,11 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 14.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(width: 50, height: 50, child: Logo()),
                     Text(
                       'Student Lifeline',
@@ -93,8 +93,10 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                       "AQqdXPQ3rsswW2UJljkczMP7uoSUqrwVOK8cjLyf6LfFbF1iV1vcyTLQOiWidshC2tmSFcOUOCPyecof",
                                   secretKey:
                                       "EAi5rs88yS1W_1Jq1DBUYQakMWyFgxk3QIlBiHIaSgGcndYTv9FR84l_iiOyE_SSiESadJv8l9tQZjN9",
-                                  returnURL: "studentLifeline://payment-complete",
-                                  cancelURL: "studentLifeline://payment-cancelled",
+                                  returnURL:
+                                      "studentLifeline://pyeah let's us skypeayment-complete",
+                                  cancelURL:
+                                      "studentLifeline://payment-cancelled",
                                   transactions: const [
                                     {
                                       "amount": {
