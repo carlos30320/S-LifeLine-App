@@ -5,7 +5,6 @@ import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../store/store.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -30,6 +29,10 @@ class _SignInScreenState extends State<SignInScreen> {
 
       Response res = await ApiClient.signIn(
           _emailController.value.text, _passwordController.value.text);
+
+      print(res.message);
+      print(res.success);
+
       if (res.success != true) {
         setState(() {
           errorText = res.message;
@@ -40,19 +43,20 @@ class _SignInScreenState extends State<SignInScreen> {
         prefs.setString('username', res.data['username']);
         prefs.setBool('isActivate', res.data['isActivated']);
         prefs.setBool('isVerified', res.data['isVerified']);
-        if (res.data['isActivated'] == false) {
+
+        if (res.data['isActivated']) {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/home');
+        } else {
           // ignore: use_build_context_synchronously
           GoRouter.of(context).go('/welcome');
-        }else{
-        // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/home');
         }
       }
       setState(() {
         isLoading = false;
       });
     } catch (e) {
-      print(e);
+      print('error: $e');
       setState(() {
         isLoading = false;
         errorText = "Something went wrong";
@@ -76,7 +80,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -185,7 +188,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                           const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 12),
                                       hintText: '***********',
-                                      hintStyle: TextStyle(color: Colors.grey),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
                                       border: InputBorder.none)),
                             ),
                           ],

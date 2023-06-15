@@ -1,5 +1,4 @@
 import 'package:american_student_book/components/logo.dart';
-import 'package:american_student_book/components/welcomeDialog.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +47,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     }
   }
 
-  void resendCode()  async {
+  void resendCode() async {
     try {
       if (isLoading) return;
       setState(() {
@@ -62,12 +61,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           errorText = res.message;
         });
       }
-    }
-    catch (e) {
+    } catch (e) {
       print(e);
     }
-  
   }
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +115,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         ),
                         errorText != null
                             ? Padding(
-                                padding: EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   errorText!,
                                   style: const TextStyle(
@@ -132,16 +130,45 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 4, top: 6, left: 10),
-                              child: Text(
-                                'Verification code',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.8),
-                                    fontSize: 14),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 4, top: 6, left: 10),
+                                  child: Text(
+                                    'Verification code',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(0.8),
+                                        fontSize: 14),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 4, top: 6, right: 10),
+                                  child: ElevatedButton(
+                                    style: const ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                Colors.white),
+                                        elevation: MaterialStatePropertyAll(0)),
+                                    onPressed: () =>
+                                        GoRouter.of(context).go('/signup'),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 6, bottom: 4),
+                                      child: Text(
+                                        "Change Email",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.blue.shade600,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 4),
                             ClipRRect(

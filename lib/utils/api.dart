@@ -34,7 +34,10 @@ class ApiClient {
           "password": password.toString()
         }),
         headers: {'Content-Type': 'application/json'});
-    print(res);
+
+    print(res.statusCode);
+    print(res.body);
+
     return Response.fromJson(jsonDecode(res.body));
   }
 

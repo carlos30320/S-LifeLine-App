@@ -1,5 +1,4 @@
 import 'package:american_student_book/screens/success.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
@@ -31,6 +30,7 @@ void requestPermissionsAndRunApp() async {
 }
 
 void handleDeepLink(Uri uri) {
+  print('____________________ $uri');
   if (uri.pathSegments.isNotEmpty) {
     if (uri.path == '/payment-complete') {
       SharedPreferences.getInstance().then((value) {
