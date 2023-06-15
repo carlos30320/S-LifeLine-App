@@ -30,7 +30,6 @@ void requestPermissionsAndRunApp() async {
 }
 
 void handleDeepLink(Uri uri) {
-  print('____________________ $uri');
   if (uri.pathSegments.isNotEmpty) {
     if (uri.path == '/payment-complete') {
       SharedPreferences.getInstance().then((value) {

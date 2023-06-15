@@ -94,7 +94,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                   secretKey:
                                       "EAi5rs88yS1W_1Jq1DBUYQakMWyFgxk3QIlBiHIaSgGcndYTv9FR84l_iiOyE_SSiESadJv8l9tQZjN9",
                                   returnURL:
-                                      "studentLifeline://pyeah let's us skypeayment-complete",
+                                      "studentLifeline://payment-complete",
                                   cancelURL:
                                       "studentLifeline://payment-cancelled",
                                   transactions: const [
