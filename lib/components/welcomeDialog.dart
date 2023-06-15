@@ -90,75 +90,61 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                               builder: (BuildContext context) => UsePaypal(
                                   sandboxMode: true,
                                   clientId:
-                                      "AQqdXPQ3rsswW2UJljkczMP7uoSUqrwVOK8cjLyf6LfFbF1iV1vcyTLQOiWidshC2tmSFcOUOCPyecof",
+                                  "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
                                   secretKey:
-                                      "EAi5rs88yS1W_1Jq1DBUYQakMWyFgxk3QIlBiHIaSgGcndYTv9FR84l_iiOyE_SSiESadJv8l9tQZjN9",
-                                  returnURL:
-                                      "studentLifeline://payment-complete",
-                                  cancelURL:
-                                      "studentLifeline://payment-cancelled",
+                                  "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+                                  returnURL: "https://samplesite.com/return",
+                                  cancelURL: "https://samplesite.com/cancel",
                                   transactions: const [
                                     {
                                       "amount": {
-                                        "total": '12.0',
+                                        "total": '10.12',
                                         "currency": "USD",
                                         "details": {
-                                          "subtotal": '12.00',
+                                          "subtotal": '10.12',
                                           "shipping": '0',
                                           "shipping_discount": 0
                                         }
                                       },
                                       "description":
-                                          "Subscription to Student Lifeline",
+                                      "The payment transaction description.",
                                       // "payment_options": {
                                       //   "allowed_payment_method":
                                       //       "INSTANT_FUNDING_SOURCE"
                                       // },
+                                      "item_list": {
+                                        "items": [
+                                          {
+                                            "name": "A demo product",
+                                            "quantity": 1,
+                                            "price": '10.12',
+                                            "currency": "USD"
+                                          }
+                                        ],
+
+                                        // shipping address is not required though
+                                        "shipping_address": {
+                                          "recipient_name": "Jane Foster",
+                                          "line1": "Travis County",
+                                          "line2": "",
+                                          "city": "Austin",
+                                          "country_code": "US",
+                                          "postal_code": "73301",
+                                          "phone": "+00000000",
+                                          "state": "Texas"
+                                        },
+                                      }
                                     }
                                   ],
-                                  note:
-                                      "Contact us for any questions on your order.",
+                                  note: "Contact us for any questions on your order.",
                                   onSuccess: (Map params) async {
                                     print("onSuccess: $params");
-                                    Response res =
-                                        await ApiClient.subscribeForAYear();
-                                    if (res.success == true) {
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      prefs.setBool('isActivated', true);
-                                      GoRouter.of(context).go('/home');
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg: "You subsscribed for a year"
-                                              .toString(),
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red.shade900,
-                                          textColor: Colors.white,
-                                          fontSize: 14.0);
-                                    }
                                   },
                                   onError: (error) {
-                                    Fluttertoast.showToast(
-                                        msg: "Something went wrong".toString(),
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red.shade900,
-                                        textColor: Colors.white,
-                                        fontSize: 14.0);
                                     print("onError: $error");
                                   },
                                   onCancel: (params) {
-                                    Fluttertoast.showToast(
-                                        msg: "Action cancelled".toString(),
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red.shade900,
-                                        textColor: Colors.white,
-                                        fontSize: 14.0);
+                                    print('cancelled: $params');
                                   }),
                             ),
                           )
