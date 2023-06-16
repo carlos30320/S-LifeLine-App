@@ -21,7 +21,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
 
   bool? isNewUser;
   bool pay=false;
-  bool dis=false;
+
 
   @override
   void initState() {
@@ -83,7 +83,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                     height: 40,
                   ),
 
-
+pay==false?
 
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -157,7 +157,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                     onSuccess: (Map params) async {
 
                                       print("onSuccess: $params");
-                                      pay=true;
+
 
 
 
@@ -176,8 +176,12 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
 
                                         Fluttertoast.showToast(msg: "Payment done");
 
-                                        pay=true;
-                                        print(pay);
+                                        setState(() {
+                                          pay=true;
+                                          print(pay);
+
+                                        });
+
 
 
 
@@ -237,7 +241,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                             )),
                       ),
                     ),
-                  ),
+                  ):
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: SizedBox(
