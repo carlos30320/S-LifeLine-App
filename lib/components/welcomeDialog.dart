@@ -18,15 +18,22 @@ class WelcomeDialog extends StatefulWidget {
 }
 
 class _WelcomeDialogState extends State<WelcomeDialog> {
+
   bool? isNewUser;
+  bool pay=false;
+  bool dis=false;
 
   @override
   void initState() {
+
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Material(
       child: SingleChildScrollView(
         child: Padding(
@@ -75,6 +82,9 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                   const SizedBox(
                     height: 40,
                   ),
+
+
+
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: SizedBox(
@@ -84,104 +94,139 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.red),
                             elevation: MaterialStatePropertyAll(0)),
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => UsePaypal(
-                                  sandboxMode: true,
-                                  clientId:
-                                  "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
-                                  secretKey:
-                                  "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
-                                  returnURL: "https://samplesite.com/return",
-                                  cancelURL: "https://samplesite.com/cancel",
-                                  transactions: const [
-                                    {
-                                      "amount": {
-                                        "total": '10.12',
-                                        "currency": "USD",
-                                        "details": {
-                                          "subtotal": '10.12',
-                                          "shipping": '0',
-                                          "shipping_discount": 0
-                                        }
-                                      },
-                                      "description":
-                                      "The payment transaction description.",
-                                      // "payment_options": {
-                                      //   "allowed_payment_method":
-                                      //       "INSTANT_FUNDING_SOURCE"
-                                      // },
-                                      "item_list": {
-                                        "items": [
-                                          {
-                                            "name": "A demo product",
-                                            "quantity": 1,
-                                            "price": '10.12',
-                                            "currency": "USD"
-                                          }
-                                        ],
+                        onPressed: ()async{
 
-                                        // shipping address is not required though
-                                        "shipping_address": {
-                                          "recipient_name": "Jane Foster",
-                                          "line1": "Travis County",
-                                          "line2": "",
-                                          "city": "Austin",
-                                          "country_code": "US",
-                                          "postal_code": "73301",
-                                          "phone": "+00000000",
-                                          "state": "Texas"
+
+
+
+
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => UsePaypal(
+
+                                    sandboxMode: true,
+                                    clientId:
+                                    "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
+                                    secretKey:
+                                    "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+                                    returnURL: "https://samplesite.com/return",
+                                    cancelURL: "https://samplesite.com/cancel",
+                                    transactions: const [
+                                      {
+                                        "amount": {
+                                          "total": '10.12',
+                                          "currency": "USD",
+                                          "details": {
+                                            "subtotal": '10.12',
+                                            "shipping": '0',
+                                            "shipping_discount": 0
+                                          }
                                         },
+                                        "description":
+                                        "The payment transaction description.",
+                                        // "payment_options": {
+                                        //   "allowed_payment_method":
+                                        //       "INSTANT_FUNDING_SOURCE"
+                                        // },
+                                        "item_list": {
+                                          "items": [
+                                            {
+                                              "name": "A demo product",
+                                              "quantity": 1,
+                                              "price": '10.12',
+                                              "currency": "USD"
+                                            }
+                                          ],
+
+                                          // shipping address is not required though
+                                          // "shipping_address": {
+                                          //   "recipient_name": "Jane Foster",
+                                          //   "line1": "Travis County",
+                                          //   "line2": "",
+                                          //   "city": "Austin",
+                                          //   "country_code": "US",
+                                          //   "postal_code": "73301",
+                                          //   "phone": "+00000000",
+                                          //   "state": "Texas"
+                                          // },
+                                        }
                                       }
-                                    }
-                                  ],
-                                  note: "Contact us for any questions on your order.",
-                                  onSuccess: (Map params) async {
-                                    print("onSuccess: $params");
-                                    Response res =
-                                        await ApiClient.subscribeForAYear();
-                                    print("-------------------------------------------------------------");
-                                    if (res.success == true) {
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      prefs.setBool('isActivated', true);
-                                      GoRouter.of(context).go('/home');
-                                    } else {
+                                    ],
+                                    note: "Contact us for any questions on your order.",
+                                    onSuccess: (Map params) async {
+
+                                      print("onSuccess: $params");
+                                      pay=true;
+
+
+
+
+
+
+
+                                      Response res =
+                                      await ApiClient.subscribeForAYear();
+
+                                      if (res.success == true) {
+
+                                        SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                        prefs.setBool('isActivated', true);
+
+                                        Fluttertoast.showToast(msg: "Payment done");
+
+                                        pay=true;
+                                        print(pay);
+
+
+
+
+                                      }
+                                      else {
+                                        Fluttertoast.showToast(
+                                            msg: "You subsscribed for a year"
+                                                .toString(),
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red.shade900,
+                                            textColor: Colors.white,
+                                            fontSize: 14.0);
+                                      }
+
+
+
+
+
+                                    },
+                                    onError: (error) {
                                       Fluttertoast.showToast(
-                                          msg: "You subsscribed for a year"
-                                              .toString(),
+                                          msg: "Something went wrong".toString(),
                                           toastLength: Toast.LENGTH_LONG,
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
                                           backgroundColor: Colors.red.shade900,
                                           textColor: Colors.white,
                                           fontSize: 14.0);
-                                    }
-                                  },
-                                  onError: (error) {
-                                    Fluttertoast.showToast(
-                                        msg: "Something went wrong".toString(),
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red.shade900,
-                                        textColor: Colors.white,
-                                        fontSize: 14.0);
-                                    print("onError: $error");
-                                  },
-                                  onCancel: (params) {
-                                    Fluttertoast.showToast(
-                                        msg: "Action cancelled".toString(),
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red.shade900,
-                                        textColor: Colors.white,
-                                        fontSize: 14.0);
-                                  }),
-                            ),
-                          )
+                                      print("onError: $error");
+                                    },
+                                    onCancel: (params) {
+                                      Fluttertoast.showToast(
+                                          msg: "Action cancelled".toString(),
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red.shade900,
+                                          textColor: Colors.white,
+                                          fontSize: 14.0);
+                                    }),
+
+                              ),
+                            );
+
+
+
                         },
                         child: Padding(
                             padding: const EdgeInsets.only(top: 18, bottom: 18),
@@ -193,6 +238,35 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                       ),
                     ),
                   ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: const ButtonStyle(
+                            backgroundColor:
+                            MaterialStatePropertyAll(Colors.lightGreenAccent),
+                            elevation: MaterialStatePropertyAll(0)),
+                        onPressed: ()async{
+
+ pay==false?
+
+ Fluttertoast.showToast(msg: "Subscribe first")
+                        :  GoRouter.of(context).go('/home');
+
+                        },
+                        child: Padding(
+                            padding: const EdgeInsets.only(top: 18, bottom: 18),
+                            child: Text(
+                              'Home Screen'.toUpperCase(),
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            )),
+                      ),
+                    ),
+                  ),
+
+
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: ElevatedButton(
@@ -213,7 +287,11 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                     ),
                   ),
                 ]),
-              )
+              ),
+
+
+
+
             ],
           ),
         ),
@@ -221,3 +299,13 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
