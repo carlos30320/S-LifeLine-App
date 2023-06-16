@@ -139,12 +139,46 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                   note: "Contact us for any questions on your order.",
                                   onSuccess: (Map params) async {
                                     print("onSuccess: $params");
+                                    Response res =
+                                        await ApiClient.subscribeForAYear();
+                                    print("-------------------------------------------------------------");
+                                    if (res.success == true) {
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      prefs.setBool('isActivated', true);
+                                      GoRouter.of(context).go('/home');
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "You subsscribed for a year"
+                                              .toString(),
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red.shade900,
+                                          textColor: Colors.white,
+                                          fontSize: 14.0);
+                                    }
                                   },
                                   onError: (error) {
+                                    Fluttertoast.showToast(
+                                        msg: "Something went wrong".toString(),
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red.shade900,
+                                        textColor: Colors.white,
+                                        fontSize: 14.0);
                                     print("onError: $error");
                                   },
                                   onCancel: (params) {
-                                    print('cancelled: $params');
+                                    Fluttertoast.showToast(
+                                        msg: "Action cancelled".toString(),
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red.shade900,
+                                        textColor: Colors.white,
+                                        fontSize: 14.0);
                                   }),
                             ),
                           )
