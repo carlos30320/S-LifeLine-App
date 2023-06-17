@@ -38,7 +38,7 @@ class ApiClient {
   }
 
   static Future<Response> verifyEmail(String verificationCode) async {
-    var res = await client.post(Uri.https(baseUrl, 'auth/verifyEmail'),
+    var res = await client.post(Uri.https(baseUrl, 'auth/verify-email'),
         body: jsonEncode({
           "verificationCode": verificationCode.toString(),
         }),
@@ -52,7 +52,7 @@ class ApiClient {
 
   static Future<Response> resendVerificationCode() async {
     var res = await client
-        .get(Uri.https(baseUrl, 'auth/resendVerificationCode'), headers: {
+        .get(Uri.https(baseUrl, 'auth/resend-verification-code'), headers: {
       'Content-Type': 'application/json',
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
@@ -61,7 +61,7 @@ class ApiClient {
   }
 
   static Future<Response> addContact(String name, String phoneNumber) async {
-    var res = await client.post(Uri.https(baseUrl, 'contacts/new'),
+    var res = await client.post(Uri.https(baseUrl, 'contacts'),
         body: jsonEncode(
             {"name": name.toString(), "phoneNumber": phoneNumber.toString()}),
         headers: {
@@ -101,7 +101,7 @@ class ApiClient {
 
   static Future<Response> getSubscriptionStatus() async {
     var res = await client
-        .get(Uri.https(baseUrl, 'paypal/subscriptionStatus'), headers: {
+        .get(Uri.https(baseUrl, 'paypal/subscription-status'), headers: {
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
     });
