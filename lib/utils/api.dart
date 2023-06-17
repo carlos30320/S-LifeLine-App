@@ -138,8 +138,8 @@ class ApiClient {
     apiOrderId=saveall['data']["order"]["orderId"];
     transectionid=saveall['data']["order"]["_id"];
 
-    print(apiOrderId);
-    print(transectionid);
+    print("order id: $apiOrderId");
+    print("transectionid: $transectionid");
 
 
 

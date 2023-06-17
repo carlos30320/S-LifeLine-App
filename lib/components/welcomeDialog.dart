@@ -34,12 +34,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
             children: [
 
 
-              ElevatedButton(onPressed: () async{
 
-
-         await    ApiClient.createorder();
-
-        }, child: Text("checkflow")),
 
 
               const Padding(
@@ -105,6 +100,10 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                       MaterialStatePropertyAll(Colors.red),
                                   elevation: MaterialStatePropertyAll(0)),
                               onPressed: () async {
+
+                                await    ApiClient.createorder();
+
+
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
@@ -166,7 +165,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                               print("onSuccess: $params");
 
                                               Response res = await ApiClient
-                                                  .subscribeForAYear();
+                                                  .completeeorder(ApiClient.transectionid, ApiClient.apiOrderId);
 
                                               if (res.success == true) {
                                                 SharedPreferences prefs =
@@ -227,6 +226,9 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                             }),
                                   ),
                                 );
+
+
+
                               },
                               child: Padding(
                                   padding: const EdgeInsets.only(
