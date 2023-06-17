@@ -9,7 +9,7 @@ class ApiClient {
   static String baseUrl = "student-lifeline.onrender.com";
   static var client = http.Client();
   static DataStore ds = DataStore.getInstance();
-  static Future<Response> SignUp(String username, String email, String password,
+  static Future<Response> signUp(String username, String email, String password,
       String confirmPassword) async {
     var response = await client.post(Uri.https(baseUrl, 'auth/signup'),
         headers: {
@@ -34,10 +34,6 @@ class ApiClient {
           "password": password.toString()
         }),
         headers: {'Content-Type': 'application/json'});
-
-    print(res.statusCode);
-    print(res.body);
-
     return Response.fromJson(jsonDecode(res.body));
   }
 
@@ -97,6 +93,15 @@ class ApiClient {
   static Future<Response> subscribeForAYear() async {
     var res = await client
         .put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
+      'Authorization':
+          '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+    });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
+  static Future<Response> getSubscriptionStatus() async {
+    var res = await client
+        .get(Uri.https(baseUrl, 'paypal/subscriptionStatus'), headers: {
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
     });

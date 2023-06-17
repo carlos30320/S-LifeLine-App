@@ -44,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         errorMessage = null;
         isLoading = true;
       });
-      Response res = await ApiClient.SignUp(
+      Response res = await ApiClient.signUp(
           _usernameController.value.text,
           _emailController.value.text,
           _passwordController.value.text,

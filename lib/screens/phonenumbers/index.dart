@@ -5,7 +5,6 @@ import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart'
     as PackagePhoneNumber;
 import 'package:phone_number/phone_number.dart' as Pn;
@@ -152,6 +151,7 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
               TextButton(onPressed: submit, child: const Text('Add number'))
             ],
           ));
+
   Future<void> fetchContacts() async {
     ds.phoneNumbers.clear();
     Response res = await ApiClient.getContacts();
@@ -203,46 +203,28 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
             padding: const EdgeInsets.only(left: 0, right: 0),
             child: Column(
               children: [
-                // Container(
-                //   decoration: BoxDecoration(
-                //       border: Border(
-                //           bottom: BorderSide(
-                //               width: 1,
-                //               color: Colors.blueGrey.withOpacity(0.4)))),
-                //   child: Padding(
-                //     padding: const EdgeInsets.symmetric(
-                //         vertical: 22.0, horizontal: 10),
-                //     child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           const Text(
-                //             'Phone book',
-                //             style: TextStyle(
-                //                 fontSize: 18, fontWeight: FontWeight.w700),
-                //           ),
-                //           IconButton(
-                //               onPressed: () => GoRouter.of(context).go('/'),
-                //               icon: const Icon(Icons.home))
-                //         ]),
-                //   ),
-                // ),
                 Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: ds.phoneNumbers.length,
-                              itemBuilder: (_, i) {
-                                return Contact(
-                                    delete: delete,
-                                    key:
-                                        ObjectKey(ds.phoneNumbers.elementAt(i)),
-                                    id: ds.phoneNumbers.elementAt(i).id!,
-                                    contact: ds.phoneNumbers
-                                        .elementAt(i)
-                                        .phonenumber,
-                                    name: ds.phoneNumbers.elementAt(i).name);
-                              },
-                            )),
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Text(
+                      'You have ${ds.phoneNumbers.length} phone numbers',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16, color: Colors.black.withOpacity(0.7)),
+                    )),
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: ds.phoneNumbers.length,
+                      itemBuilder: (_, i) {
+                        return Contact(
+                            delete: delete,
+                            key: ObjectKey(ds.phoneNumbers.elementAt(i)),
+                            id: ds.phoneNumbers.elementAt(i).id!,
+                            contact: ds.phoneNumbers.elementAt(i).phonenumber,
+                            name: ds.phoneNumbers.elementAt(i).name);
+                      },
+                    )),
                 Container(
                     child: canAddMoreusers
                         ? FloatingActionButton(
