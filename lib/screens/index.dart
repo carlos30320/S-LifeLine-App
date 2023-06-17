@@ -189,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   CarouselSlider(
-                    
                       items: [
                         "assets/001.png",
                         'assets/002.png',
@@ -214,8 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           )
                           .toList(),
-                      options: CarouselOptions(
-                          height: 340, animateToClosest: true)),
+                      options:
+                          CarouselOptions(height: 340, animateToClosest: true)),
                   const SizedBox(
                     height: 6,
                   ),
