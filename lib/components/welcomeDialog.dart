@@ -32,6 +32,16 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(
             children: [
+
+
+              ElevatedButton(onPressed: () async{
+
+
+         await    ApiClient.createorder();
+
+        }, child: Text("checkflow")),
+
+
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 14.0),
                 child: Row(

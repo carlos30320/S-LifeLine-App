@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient {
+   static var apiOrderId;
+   static var transectionid;
   static String baseUrl = "student-lifeline.onrender.com";
   static var client = http.Client();
   static DataStore ds = DataStore.getInstance();
@@ -116,4 +118,60 @@ class ApiClient {
     });
     return Response.fromJson(jsonDecode(res.body));
   }
+
+
+
+
+  static Future createorder()async{
+
+    var res = await client.post(Uri.https(baseUrl,'/paypal/create-order'),
+        body: "",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5hamkiLCJpZCI6IjY0OGQ2ZDQwYTI3MTRlOTI0ZDFkODRlNiIsImlhdCI6MTY4NzAyMjI0Mn0.tjXLhGB-9w7ffrL-PRD0g9U00MCI4LYtY2KMzCwUKo4'
+        });
+
+    var saveall=jsonDecode(res.body);
+
+
+    apiOrderId=saveall['data']["order"]["orderId"];
+    transectionid=saveall['data']["order"]["_id"];
+
+    print(apiOrderId);
+    print(transectionid);
+
+
+
+
+
+  }
+   static Future completeeorder(String transectionid,String apiOrderId )async{
+
+     var res = await client.post(Uri.https(baseUrl,'/paypal/complete-order'),
+         body: {
+           "transactionId": transectionid,
+           "orderId": apiOrderId
+         },
+         headers: {
+           'Content-Type': 'application/json',
+           'Authorization':
+           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5hamkiLCJpZCI6IjY0OGQ2ZDQwYTI3MTRlOTI0ZDFkODRlNiIsImlhdCI6MTY4NzAyMjI0Mn0.tjXLhGB-9w7ffrL-PRD0g9U00MCI4LYtY2KMzCwUKo4'
+         });
+
+     var saveall=jsonDecode(res.body);
+
+
+
+
+
+
+
+
+   }
+
+
+
+
+
 }
