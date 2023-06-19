@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:american_student_book/layout/common_scaffold.dart';
 import 'package:american_student_book/store/store.dart';
+import 'package:american_student_book/utils/api.dart';
+import 'package:american_student_book/utils/factories.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   bool smsPermitted = false;
   bool locationPermitted = false;
-
   String subscriptionEndDate = "";
 
   Future<void> requestSmsPermission() async {
@@ -38,23 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
         smsPermitted = true;
       });
     }
-  }
-
-  void _liveLocation() {
-    LocationSettings settings = const LocationSettings(
-      accuracy: LocationAccuracy.best,
-      distanceFilter: 0,
-    );
-
-    Geolocator.getPositionStream(locationSettings: settings)
-        .listen((Position position) {
-      setState(() {
-        location =
-            "Latutude: ${position.latitude}, Longitude: ${position.longitude}";
-        ds.location
-            .set(position.latitude.toString(), position.longitude.toString());
-      });
-    });
   }
 
   Future<void> getCurrentLocation() async {
@@ -90,45 +74,64 @@ class _HomeScreenState extends State<HomeScreen> {
     subscriptionEndDate = prefs.getString('subscriptionEndDate') ?? "";
   }
 
-  void _sendSMS(String message, List<String> recipents) async {
+  void _sendSMS() async {
     if (await Permission.sms.isGranted) {
-      if (recipents.isEmpty) {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Check if the user is logged in
+      String username = prefs.getString('username') ?? "";
+      String message = '$username is asking for help at $location';
+
+      Response res = await ApiClient.getContacts();
+      if (res.success == true) {
+        var nums = res.data['contacts'];
+
+        if (nums.length == 0) {
+          Fluttertoast.showToast(
+              msg: "You have no number registered".toString(),
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red.shade900,
+              textColor: Colors.white,
+              fontSize: 14.0);
+        } else {
+          nums.forEach((element) async {
+            SmsStatus result = await BackgroundSms.sendMessage(
+                phoneNumber: element['phoneNumber'],
+                message: message,
+                simSlot: 1);
+            if (result == SmsStatus.sent) {
+              Fluttertoast.showToast(
+                msg:
+                    "Message sent to ${element['name']}(${element['phoneNumber']}).",
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+              );
+            } else {
+              Fluttertoast.showToast(
+                msg:
+                    "Failed to send message to ${element['name']}(${element['phoneNumber']}).",
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+              );
+            }
+          });
+        }
+      } else {
         Fluttertoast.showToast(
-            msg: "You have no number registered".toString(),
+            msg: "Aww! Something went wrong while getting phone numbers"
+                .toString(),
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.red.shade900,
             textColor: Colors.white,
             fontSize: 14.0);
-        return;
       }
-      recipents.forEach((rec) async {
-        SmsStatus result = await BackgroundSms.sendMessage(
-            phoneNumber: rec, message: message, simSlot: 1);
-        if (result == SmsStatus.sent) {
-          Fluttertoast.showToast(
-            msg: "Message sent to $rec",
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-          );
-        } else {
-          Fluttertoast.showToast(
-            msg: "Failed to send message to $rec",
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-          );
-        }
-      });
-
-      Fluttertoast.showToast(
-        msg: "Message sent successfully",
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-      );
     } else {
       await requestSmsPermission();
-      _sendSMS(message, recipents);
+      _sendSMS();
     }
   }
 
@@ -144,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await requestSmsPermission();
       await getSubscriptionStatus();
       await getCurrentLocation();
-      _liveLocation();
     });
     super.initState();
   }
@@ -176,9 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.red.shade700),
               elevation: const MaterialStatePropertyAll(0)),
-          onPressed: () => _sendSMS(
-              "${ds.getUsername()} is asking for help at ${location}",
-              ds.phoneNumbers.map((e) => e.phonenumber).toList()),
+          onPressed: () => _sendSMS(),
           child: const Padding(
             padding: EdgeInsets.only(top: 20, bottom: 20),
             child: Text(
@@ -288,22 +288,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 6,
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.red.shade100.withOpacity(0.5),
-                    ),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        'Your subscription is valid until the ${formatDate(subscriptionEndDate)}',
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.red.shade700),
+                  if (subscriptionEndDate != "")
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.red.shade100.withOpacity(0.5),
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'Your subscription is valid until the ${formatDate(subscriptionEndDate)}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 14, color: Colors.red.shade700),
+                        ),
                       ),
                     ),
-                  ),
                   const SizedBox(
                     height: 20,
                   ),

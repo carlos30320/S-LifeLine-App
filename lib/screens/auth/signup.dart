@@ -1,6 +1,4 @@
 import 'package:american_student_book/components/logo.dart';
-// import 'package:american_student_book/components/welcome_dialog.dart';
-import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
@@ -22,21 +20,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? errorMessage;
   bool isLoading = false;
 
-  DataStore ds = DataStore.getInstance();
-
-  // showWelcomeDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return const Dialog(
-  //         insetPadding: EdgeInsets.all(4),
-  //         elevation: 0,
-  //         child: WelcomeDialog(),
-  //       );
-  //     },
-  //   );
-  // }
-
   void submit() async {
     try {
       if (isLoading) return;
@@ -56,9 +39,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         });
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('access_token', res.data['token']);
-        prefs.setString('username', res.data['username']);
-        prefs.setBool('isActivated', res.data['isActivated']);
+        await prefs.setString('access_token', res.data['token']);
+        await prefs.setString('username', res.data['username']);
+        await prefs.setBool('isActivated', res.data['isActivated']);
         GoRouter.of(context).go('/verifyEmail');
       }
       setState(() {

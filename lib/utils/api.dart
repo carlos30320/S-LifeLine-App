@@ -1,4 +1,3 @@
-import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiClient {
   static String baseUrl = "student-lifeline.onrender.com";
   static var client = http.Client();
-  static DataStore ds = DataStore.getInstance();
+
   static Future<Response> signUp(String username, String email, String password,
       String confirmPassword) async {
     var response = await client.post(Uri.https(baseUrl, 'auth/signup'),
@@ -52,7 +51,7 @@ class ApiClient {
 
   static Future<Response> resendVerificationCode() async {
     var res = await client
-        .get(Uri.https(baseUrl, 'auth/resend-verification-code'), headers: {
+        .post(Uri.https(baseUrl, 'auth/resend-verification-code'), headers: {
       'Content-Type': 'application/json',
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'

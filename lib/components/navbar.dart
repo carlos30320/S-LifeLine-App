@@ -42,6 +42,7 @@ class NavBar extends StatelessWidget {
               title: const Text('Logout'),
               onTap: () {
                 SharedPreferences.getInstance().then((prefs) {
+                  prefs.remove('isLoggedIn');
                   prefs.remove('access_token');
                   prefs.remove('username');
                   GoRouter.of(context).go('/signin');

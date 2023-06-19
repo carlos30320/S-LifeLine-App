@@ -28,36 +28,6 @@ void requestPermissionsAndRunApp() async {
   }
 }
 
-// void handleDeepLink(Uri uri) {
-//   if (uri.pathSegments.isNotEmpty) {
-//     if (uri.path == '/payment-complete') {
-//       SharedPreferences.getInstance().then((value) {
-//         value.setBool('isActivated', true).then((_) {
-//           runApp(MyApp(paymentSuccess: true));
-//         });
-//       });
-//     } else if (uri.path == '/payment-failed') {
-//       SharedPreferences.getInstance().then((value) {
-//         value.setBool('isActivated', false).then((_) {
-//           runApp(MyApp(paymentSuccess: false));
-//         });
-//       });
-//     }
-//   }
-// }
-
-// void initUniLinks() async {
-//   try {
-//     Uri? initialUri = await getInitialUri();
-//     handleDeepLink(initialUri!);
-//     uriLinkStream.listen((uri) {
-//       handleDeepLink(uri!);
-//     });
-//   } on PlatformException {
-//     SystemNavigator.pop();
-//   }
-// }
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   requestPermissionsAndRunApp();
@@ -71,6 +41,7 @@ void main() async {
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   bool isSubscribed = false;
 
+  print("a)isLoggedIn           $isLoggedIn");
   if (isLoggedIn) {
     //  Check subscription status
     Response res = await ApiClient.getSubscriptionStatus();
@@ -78,6 +49,7 @@ void main() async {
       isSubscribed = res.data['isAvailable'];
       prefs.setString('subscriptionEndDate', res.data['subscriptionEndDate']);
     } else {
+      print("a)_           $res");
       Fluttertoast.showToast(
           msg: "Aww! Something went wrong".toString(),
           toastLength: Toast.LENGTH_LONG,
@@ -86,6 +58,8 @@ void main() async {
           backgroundColor: Colors.red.shade900,
           textColor: Colors.white,
           fontSize: 14.0);
+
+      await prefs.setBool('isLoggedIn', false);
     }
   }
 

@@ -1,13 +1,12 @@
 import 'package:american_student_book/components/contact.dart';
 import 'package:american_student_book/layout/common_scaffold.dart';
-import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart'
-    as PackagePhoneNumber;
-import 'package:phone_number/phone_number.dart' as Pn;
+    as package_phone_number;
+import 'package:phone_number/phone_number.dart' as pn;
 
 class PhoneNumbers extends StatefulWidget {
   const PhoneNumbers({super.key});
@@ -15,8 +14,18 @@ class PhoneNumbers extends StatefulWidget {
   State<PhoneNumbers> createState() => _PhoneNumbersState();
 }
 
+class PhoneNumber {
+  final String id;
+  final String name;
+  final String phonenumber;
+
+  PhoneNumber(
+      {required this.id, required this.name, required this.phonenumber});
+}
+
 class _PhoneNumbersState extends State<PhoneNumbers> {
-  DataStore ds = DataStore.getInstance();
+  var _phoneNumbers = <PhoneNumber>[];
+
   final _nameController = TextEditingController();
   final _numberController = TextEditingController();
   String numberPre = "";
@@ -25,10 +34,12 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
   void submit() async {
     if (_nameController.value.text.isNotEmpty ||
         _numberController.value.text.isNotEmpty) {
-      String formatted = await Pn.PhoneNumberUtil().format(
+      String formatted = await pn.PhoneNumberUtil().format(
           numberPre + _numberController.value.text, numberPre.split("+")[1]);
       Navigator.of(context).pop(PhoneNumber(
-          name: _nameController.value.text.toString(), phonenumber: formatted));
+          name: _nameController.value.text.toString(),
+          phonenumber: formatted,
+          id: ''));
 
       _nameController.clear();
       _numberController.clear();
@@ -58,9 +69,9 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
     if (result == true) {
       Response res = await ApiClient.deleteContact(id.toString());
       if (res.success == true) {
+        _phoneNumbers.removeWhere((phoneNumber) => phoneNumber.id == id);
         setState(() {
-          ds.removeNumber(id);
-          if (ds.phoneNumbers.length >= 3) {
+          if (_phoneNumbers.length >= 3) {
             canAddMoreusers = false;
           } else {
             canAddMoreusers = true;
@@ -82,7 +93,7 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
   Future<PhoneNumber?> openDialog() => showDialog<PhoneNumber>(
       context: context,
       builder: (context) => AlertDialog(
-            title: const Text("Add number"),
+            title: const Text("Add Phone Number"),
             content: SizedBox(
               height: 200,
               width: double.infinity,
@@ -125,21 +136,22 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
                   decoration: BoxDecoration(
                       color: Colors.blueGrey.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(10)),
-                  child: PackagePhoneNumber.InternationalPhoneNumberInput(
+                  child: package_phone_number.InternationalPhoneNumberInput(
                     inputBorder: InputBorder.none,
                     hintText: '333 444 5672',
                     inputDecoration: const InputDecoration(
                         hintText: '333 444 5672',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: InputBorder.none),
-                    selectorConfig: const PackagePhoneNumber.SelectorConfig(
-                      selectorType: PackagePhoneNumber
+                    selectorConfig: const package_phone_number.SelectorConfig(
+                      selectorType: package_phone_number
                           .PhoneInputSelectorType.BOTTOM_SHEET,
                     ),
                     onInputChanged: (value) => {
                       numberPre = value.dialCode!,
                     },
-                    initialValue: PackagePhoneNumber.PhoneNumber(isoCode: 'US'),
+                    initialValue:
+                        package_phone_number.PhoneNumber(isoCode: 'US'),
                     keyboardType:
                         const TextInputType.numberWithOptions(signed: true),
                     textFieldController: _numberController,
@@ -148,22 +160,26 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
               ]),
             ),
             actions: [
-              TextButton(onPressed: submit, child: const Text('Add number'))
+              TextButton(onPressed: submit, child: const Text('Add Number')),
             ],
           ));
 
+  PhoneNumber toPhoneNumber(Map<String, dynamic> data) {
+    return PhoneNumber(
+      id: data['_id'],
+      name: data['name'],
+      phonenumber: data['phoneNumber'],
+    );
+  }
+
   Future<void> fetchContacts() async {
-    ds.phoneNumbers.clear();
     Response res = await ApiClient.getContacts();
     if (res.success == true) {
       var nums = res.data['contacts'];
-      nums.forEach((element) {
-        setState(() {
-          ds.addNumber(PhoneNumber(
-              id: element['_id'],
-              name: element['name'],
-              phonenumber: element['phoneNumber']));
-        });
+
+      setState(() {
+        _phoneNumbers =
+            List.generate(nums.length, (index) => toPhoneNumber(nums[index]));
       });
     } else {
       Fluttertoast.showToast(
@@ -184,7 +200,7 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
     setState(() {
       fetchContacts().then((v) => {
             isLoading = false,
-            if (ds.phoneNumbers.length >= 3)
+            if (_phoneNumbers.length >= 3)
               canAddMoreusers = false
             else
               canAddMoreusers = true
@@ -206,7 +222,7 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
                 Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      'You have ${ds.phoneNumbers.length} phone numbers',
+                      '${_phoneNumbers.length} contacts found',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 16, color: Colors.black.withOpacity(0.7)),
@@ -215,14 +231,14 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: ds.phoneNumbers.length,
-                      itemBuilder: (_, i) {
+                      itemCount: _phoneNumbers.length,
+                      itemBuilder: (BuildContext context, int i) {
                         return Contact(
                             delete: delete,
-                            key: ObjectKey(ds.phoneNumbers.elementAt(i)),
-                            id: ds.phoneNumbers.elementAt(i).id!,
-                            contact: ds.phoneNumbers.elementAt(i).phonenumber,
-                            name: ds.phoneNumbers.elementAt(i).name);
+                            key: ObjectKey(_phoneNumbers[i]),
+                            id: _phoneNumbers[i].id,
+                            contact: _phoneNumbers[i].phonenumber,
+                            name: _phoneNumbers[i].name);
                       },
                     )),
                 Container(
@@ -232,19 +248,19 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
                             elevation: 0,
                             child: const Icon(Icons.person_add),
                             onPressed: () async {
-                              if (ds.phoneNumbers.length != 3) {
+                              if (_phoneNumbers.length != 3) {
                                 final newnumber = await openDialog();
                                 Response res = await ApiClient.addContact(
                                     newnumber!.name, newnumber.phonenumber);
                                 if (res.success == true) {
+                                  print("asdfasdfasdfasdfasdf ${res.data}");
                                   var thisNumber = PhoneNumber(
-                                      id: res.data['contact']['_id'],
-                                      name: res.data['contact']['name'],
-                                      phonenumber: res.data['contact']
-                                          ['phoneNumber']);
-                                  ds.addNumber(thisNumber);
+                                      id: res.data['_id'],
+                                      name: res.data['name'],
+                                      phonenumber: res.data['phoneNumber']);
+                                  setState(() => _phoneNumbers.add(thisNumber));
                                   setState(() {
-                                    if (ds.phoneNumbers.length < 3) {
+                                    if (_phoneNumbers.length < 3) {
                                       canAddMoreusers = true;
                                     } else {
                                       canAddMoreusers = false;

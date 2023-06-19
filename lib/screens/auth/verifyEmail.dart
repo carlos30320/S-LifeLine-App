@@ -56,6 +56,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       });
 
       Response res = await ApiClient.resendVerificationCode();
+      setState(() {
+        isLoading = false;
+      });
       if (res.success != true) {
         setState(() {
           errorText = res.message;

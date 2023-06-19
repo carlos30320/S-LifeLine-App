@@ -4,7 +4,7 @@ class Contact extends StatelessWidget {
   final String id;
   final String name;
   final String contact;
-  final void Function(int) delete;
+  final void Function(String) delete;
 
   const Contact({
     required Key key,
@@ -49,7 +49,7 @@ class Contact extends StatelessWidget {
               ],
             ),
             IconButton(
-              onPressed: () => delete(int.parse(id)),
+              onPressed: () => delete(id),
               icon: const Icon(
                 Icons.delete_outline_rounded,
                 color: Colors.red,
