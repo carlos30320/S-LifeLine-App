@@ -278,28 +278,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.white),
-                        elevation: MaterialStatePropertyAll(0)),
-                    onPressed: () => GoRouter.of(context).go('/signin'),
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 18, bottom: 18),
-                      child: Text(
-                        "I already have an account",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
+              ElevatedButton(
+                style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.white),
+                    elevation: MaterialStatePropertyAll(0)),
+                onPressed: () => GoRouter.of(context).go('/signin'),
+                child: const Text(
+                  'I already have an account',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Response {
   int? status;
   String? message;
