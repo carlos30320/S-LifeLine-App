@@ -16,6 +16,7 @@ dependencies:
   shared_preferences: ^2.1.1
   flutter_sms: ^2.3.3
   intl_phone_number_input: ^0.7.3
+  intl:
   http:
   permission_handler:
   phone_number:
@@ -25,7 +26,6 @@ dependencies:
   url_launcher:
   flutter_paypal: 0.2.0
   http_auth:
-  # webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_test:

@@ -22,7 +22,7 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.home, color: Colors.red),
               title: const Text('Home'),
               onTap: () {
-                GoRouter.of(context).go('/');
+                GoRouter.of(context).go('/home');
               },
             ),
             ListTile(
@@ -44,7 +44,7 @@ class NavBar extends StatelessWidget {
                 SharedPreferences.getInstance().then((prefs) {
                   prefs.remove('access_token');
                   prefs.remove('username');
-                GoRouter.of(context).go('/signin');
+                  GoRouter.of(context).go('/signin');
                 });
               },
             ),

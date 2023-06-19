@@ -6,7 +6,7 @@ import 'package:american_student_book/screens/auth/signin.dart';
 import 'package:american_student_book/screens/auth/signup.dart';
 import 'package:american_student_book/screens/auth/subscription.dart';
 import 'package:american_student_book/screens/auth/verifyEmail.dart';
-import 'package:american_student_book/screens/index.dart';
+import 'package:american_student_book/screens/home/index.dart';
 import 'package:american_student_book/screens/phonenumbers/index.dart';
 import 'package:american_student_book/utils/permissionsHandler.dart';
 import 'package:flutter/services.dart';
@@ -65,7 +65,7 @@ void main() async {
 
   // Initialize SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Check if the user is logged in
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -76,6 +76,7 @@ void main() async {
     Response res = await ApiClient.getSubscriptionStatus();
     if (res.success == true) {
       isSubscribed = res.data['isAvailable'];
+      prefs.setString('subscriptionEndDate', res.data['subscriptionEndDate']);
     } else {
       Fluttertoast.showToast(
           msg: "Aww! Something went wrong".toString(),

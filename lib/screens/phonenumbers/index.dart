@@ -1,5 +1,5 @@
 import 'package:american_student_book/components/contact.dart';
-import 'package:american_student_book/layout/commonScaffold.dart';
+import 'package:american_student_book/layout/common_scaffold.dart';
 import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';

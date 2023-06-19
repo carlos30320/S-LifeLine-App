@@ -1,5 +1,5 @@
 import 'package:american_student_book/components/logo.dart';
-import 'package:american_student_book/components/welcomeDialog.dart';
+// import 'package:american_student_book/components/welcome_dialog.dart';
 import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
@@ -24,18 +24,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   DataStore ds = DataStore.getInstance();
 
-  showWelcomeDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const Dialog(
-          insetPadding: EdgeInsets.all(4),
-          elevation: 0,
-          child: WelcomeDialog(),
-        );
-      },
-    );
-  }
+  // showWelcomeDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return const Dialog(
+  //         insetPadding: EdgeInsets.all(4),
+  //         elevation: 0,
+  //         child: WelcomeDialog(),
+  //       );
+  //     },
+  //   );
+  // }
 
   void submit() async {
     try {

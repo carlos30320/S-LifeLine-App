@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:american_student_book/layout/commonScaffold.dart';
+import 'package:american_student_book/layout/common_scaffold.dart';
 import 'package:american_student_book/store/store.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:background_sms/background_sms.dart';
+import 'package:american_student_book/utils/formatDateTime.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   bool smsPermitted = false;
   bool locationPermitted = false;
+
+  String subscriptionEndDate = "";
 
   Future<void> requestSmsPermission() async {
     if (await Permission.sms.isDenied) {
@@ -80,6 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> getSubscriptionStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Check if the user is logged in
+    subscriptionEndDate = prefs.getString('subscriptionEndDate') ?? "";
+  }
+
   void _sendSMS(String message, List<String> recipents) async {
     if (await Permission.sms.isGranted) {
       if (recipents.isEmpty) {
@@ -132,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     checkAuthStatus().then((value) async {
       await requestSmsPermission();
+      await getSubscriptionStatus();
       await getCurrentLocation();
       _liveLocation();
     });
@@ -190,12 +201,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   CarouselSlider(
                       items: [
-                        "assets/001.png",
-                        'assets/002.png',
-                        'assets/003.png',
-                        'assets/004.png',
-                        'assets/005.png',
-                        'assets/006.png',
+                        'assets/5.png',
+                        'assets/6.png',
+                        'assets/7.png',
+                        "assets/1.png",
+                        'assets/2.png',
+                        'assets/3.png',
+                        'assets/4.png',
+                        'assets/logo.png',
                       ]
                           .map(
                             (e) => ElevatedButton(
@@ -284,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SizedBox(
                       width: double.infinity,
                       child: Text(
-                        'Your membership will be ended at 25th July',
+                        'Your subscription is valid until the ${formatDate(subscriptionEndDate)}',
                         textAlign: TextAlign.center,
                         style:
                             TextStyle(fontSize: 14, color: Colors.red.shade700),

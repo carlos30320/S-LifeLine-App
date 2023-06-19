@@ -1,5 +1,5 @@
 import 'package:american_student_book/components/logo.dart';
-import 'package:american_student_book/components/welcomeDialog.dart';
+import 'package:american_student_book/components/welcome_dialog.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
         prefs.setString('username', res.data['username']);
         prefs.setBool('isActivate', res.data['isActivated']);
         prefs.setBool('isVerified', res.data['isVerified']);
+        prefs.setString('subscriptionEndDate', res.data['subscriptionEndDate']);
 
         if (res.data['isActivated']) {
           // ignore: use_build_context_synchronously
@@ -113,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         errorText != null
                             ? Padding(
-                                padding: EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   errorText!,
                                   style: const TextStyle(
@@ -152,7 +153,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                           const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 12),
                                       hintText: 'john@doe.com',
-                                      hintStyle: TextStyle(color: Colors.grey),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
                                       border: InputBorder.none)),
                             ),
                           ],
@@ -161,8 +163,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: 4, top: 6, left: 10),
+                              padding: const EdgeInsets.only(
+                                  bottom: 4, top: 6, left: 10),
                               child: Text(
                                 'Password',
                                 style: TextStyle(

@@ -1,4 +1,4 @@
-import 'package:american_student_book/components/welcomeDialog.dart';
+import 'package:american_student_book/components/welcome_dialog.dart';
 import 'package:flutter/material.dart';
 
 class SubscribePage extends StatelessWidget {
