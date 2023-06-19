@@ -20,48 +20,48 @@ class _SignInScreenState extends State<SignInScreen> {
 
   String? errorText;
   void submit() async {
-    // try {
-    if (isLoading) return;
-    setState(() {
-      errorText = null;
-      isLoading = true;
-    });
-
-    Response res = await ApiClient.signIn(
-        _emailController.value.text, _passwordController.value.text);
-
-    if (res.success != true) {
+    try {
+      if (isLoading) return;
       setState(() {
-        errorText = res.message;
+        errorText = null;
+        isLoading = true;
       });
-    } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('access_token', res.data['token']);
-      await prefs.setString('username', res.data['username']);
-      await prefs.setBool('isActivate', res.data['isActivated']);
-      await prefs.setBool('isVerified', res.data['isVerified']);
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString(
-          'subscriptionEndDate', res.data['subscriptionEndDate'] ?? "");
 
-      if (res.data['isActivated']) {
-        // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/home');
+      Response res = await ApiClient.signIn(
+          _emailController.value.text, _passwordController.value.text);
+
+      if (res.success != true) {
+        setState(() {
+          errorText = res.message;
+        });
       } else {
-        // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/welcome');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('access_token', res.data['token']);
+        await prefs.setString('username', res.data['username']);
+        await prefs.setBool('isActivate', res.data['isActivated']);
+        await prefs.setBool('isVerified', res.data['isVerified']);
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString(
+            'subscriptionEndDate', res.data['subscriptionEndDate'] ?? "");
+
+        if (res.data['isActivated']) {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/home');
+        } else {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/welcome');
+        }
       }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print('error: $e');
+      setState(() {
+        isLoading = false;
+        errorText = "Something went wrong";
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
-    // } catch (e) {
-    //   print('error: $e');
-    //   setState(() {
-    //     isLoading = false;
-    //     errorText = "Something went wrong";
-    //   });
-    // }
   }
 
   showWelcomeDialog() {
