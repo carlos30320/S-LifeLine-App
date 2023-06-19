@@ -56,11 +56,11 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
             content: const Text('Are you sure you want to delete this number?'),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Yes')),
-              TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text('No')),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('Yes')),
             ],
           ));
 

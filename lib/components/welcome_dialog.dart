@@ -156,8 +156,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                                 });
                                               } else {
                                                 Fluttertoast.showToast(
-                                                    msg: "Something wrong."
-                                                        .toString(),
+                                                    msg: res.message.toString(),
                                                     toastLength:
                                                         Toast.LENGTH_LONG,
                                                     gravity:

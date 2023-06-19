@@ -280,8 +280,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               ElevatedButton(
                 style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.white),
-                    elevation: MaterialStatePropertyAll(0)),
+                  backgroundColor: MaterialStatePropertyAll(Colors.white),
+                  elevation: MaterialStatePropertyAll(0),
+                ),
                 onPressed: () => GoRouter.of(context).go('/signin'),
                 child: const Text(
                   'I already have an account',
