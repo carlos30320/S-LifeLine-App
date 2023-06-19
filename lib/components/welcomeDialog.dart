@@ -1,5 +1,3 @@
-import 'package:american_student_book/utils/api.dart';
-import 'package:american_student_book/utils/factories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
@@ -7,6 +5,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:american_student_book/components/logo.dart';
+
+import '../utils/api.dart';
+import '../utils/factories.dart';
 
 class WelcomeDialog extends StatefulWidget {
   const WelcomeDialog({super.key});
@@ -32,11 +33,6 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(
             children: [
-
-
-
-
-
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 14.0),
                 child: Row(
@@ -100,10 +96,6 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                       MaterialStatePropertyAll(Colors.red),
                                   elevation: MaterialStatePropertyAll(0)),
                               onPressed: () async {
-
-                                await    ApiClient.createorder();
-
-
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
@@ -130,10 +122,6 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                                 },
                                                 "Student LifeLine Subscription":
                                                     "Payment for Student LifeLine Subscription.",
-                                                // "payment_options": {
-                                                //   "allowed_payment_method":
-                                                //       "INSTANT_FUNDING_SOURCE"
-                                                // },
                                                 "item_list": {
                                                   "items": [
                                                     {
@@ -144,28 +132,14 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                                       "currency": "USD"
                                                     }
                                                   ],
-
-                                                  // shipping address is not required though
-                                                  // "shipping_address": {
-                                                  //   "recipient_name": "Jane Foster",
-                                                  //   "line1": "Travis County",
-                                                  //   "line2": "",
-                                                  //   "city": "Austin",
-                                                  //   "country_code": "US",
-                                                  //   "postal_code": "73301",
-                                                  //   "phone": "+00000000",
-                                                  //   "state": "Texas"
-                                                  // },
                                                 }
                                               }
                                             ],
                                             note:
                                                 "Contact us for any questions on your order.",
                                             onSuccess: (Map params) async {
-                                              print("onSuccess: $params");
-
                                               Response res = await ApiClient
-                                                  .completeeorder(ApiClient.transectionid, ApiClient.apiOrderId);
+                                                  .subscribeForAYear();
 
                                               if (res.success == true) {
                                                 SharedPreferences prefs =
@@ -179,13 +153,11 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
 
                                                 setState(() {
                                                   pay = true;
-                                                  print(pay);
                                                 });
                                               } else {
                                                 Fluttertoast.showToast(
-                                                    msg:
-                                                        "You subsscribed for a year"
-                                                            .toString(),
+                                                    msg: "Something wrong."
+                                                        .toString(),
                                                     toastLength:
                                                         Toast.LENGTH_LONG,
                                                     gravity:
@@ -226,9 +198,6 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                                             }),
                                   ),
                                 );
-
-
-
                               },
                               child: Padding(
                                   padding: const EdgeInsets.only(

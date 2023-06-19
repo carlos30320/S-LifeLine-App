@@ -30,9 +30,6 @@ class _SignInScreenState extends State<SignInScreen> {
       Response res = await ApiClient.signIn(
           _emailController.value.text, _passwordController.value.text);
 
-      print(res.message);
-      print(res.success);
-
       if (res.success != true) {
         setState(() {
           errorText = res.message;

@@ -6,8 +6,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient {
-   static var apiOrderId;
-   static var transectionid;
   static String baseUrl = "student-lifeline.onrender.com";
   static var client = http.Client();
   static DataStore ds = DataStore.getInstance();
@@ -92,15 +90,6 @@ class ApiClient {
     return Response.fromJson(jsonDecode(res.body));
   }
 
-  static Future<Response> subscribeForAYear() async {
-    var res = await client
-        .put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
-      'Authorization':
-          '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
-    });
-    return Response.fromJson(jsonDecode(res.body));
-  }
-
   static Future<Response> getSubscriptionStatus() async {
     var res = await client
         .get(Uri.https(baseUrl, 'paypal/subscription-status'), headers: {
@@ -110,68 +99,35 @@ class ApiClient {
     return Response.fromJson(jsonDecode(res.body));
   }
 
-  static Future<Response> unsubscribe() async {
-    var res = await client
-        .put(Uri.https(baseUrl, 'paypal/subscribeForAYear'), headers: {
+  static Future<Response> subscribeForAYear() async {
+    var res =
+        await client.put(Uri.https(baseUrl, 'paypal/subscribe'), headers: {
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
     });
     return Response.fromJson(jsonDecode(res.body));
   }
 
+  // static Future<Response> createorder() async {
+  //   var res =
+  //       await client.post(Uri.https(baseUrl, '/paypal/create-order'), headers: {
+  //     'Authorization':
+  //         '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+  //   });
+  //   print("____________________");
+  //   return Response.fromJson(jsonDecode(res.body));
+  // }
 
+  // static Future completeeorder(String transactionId, String orderId) async {
+  //   var res =
+  //       await client.post(Uri.https(baseUrl, '/paypal/complete-order'), body: {
+  //     "transactionId": transactionId,
+  //     "orderId": orderId
+  //   }, headers: {
+  //     'Authorization':
+  //         '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+  //   });
 
-
-  static Future createorder()async{
-
-    var res = await client.post(Uri.https(baseUrl,'/paypal/create-order'),
-        body: "",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5hamkiLCJpZCI6IjY0OGQ2ZDQwYTI3MTRlOTI0ZDFkODRlNiIsImlhdCI6MTY4NzAyMjI0Mn0.tjXLhGB-9w7ffrL-PRD0g9U00MCI4LYtY2KMzCwUKo4'
-        });
-
-    var saveall=jsonDecode(res.body);
-
-
-    apiOrderId=saveall['data']["order"]["orderId"];
-    transectionid=saveall['data']["order"]["_id"];
-
-    print("order id: $apiOrderId");
-    print("transectionid: $transectionid");
-
-
-
-
-
-  }
-   static Future completeeorder(String transectionid,String apiOrderId )async{
-
-     var res = await client.post(Uri.https(baseUrl,'/paypal/complete-order'),
-         body: {
-           "transactionId": transectionid,
-           "orderId": apiOrderId
-         },
-         headers: {
-           'Content-Type': 'application/json',
-           'Authorization':
-           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5hamkiLCJpZCI6IjY0OGQ2ZDQwYTI3MTRlOTI0ZDFkODRlNiIsImlhdCI6MTY4NzAyMjI0Mn0.tjXLhGB-9w7ffrL-PRD0g9U00MCI4LYtY2KMzCwUKo4'
-         });
-
-     var saveall=jsonDecode(res.body);
-
-
-
-
-
-
-
-
-   }
-
-
-
-
-
+  //   return Response.fromJson(jsonDecode(res.body));
+  // }
 }
