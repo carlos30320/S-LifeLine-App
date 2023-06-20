@@ -5,52 +5,61 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
 
-  String? errorMessage;
   bool isLoading = false;
+  bool _rememberMe = false;
 
+  String? errorText;
   void submit() async {
     try {
       if (isLoading) return;
       setState(() {
-        errorMessage = null;
+        errorText = null;
         isLoading = true;
       });
-      Response res = await ApiClient.signUp(
-          _usernameController.value.text,
-          _emailController.value.text,
-          _passwordController.value.text,
-          _confirmPasswordController.value.text);
+
+      Response res = await ApiClient.signIn(
+          _emailController.value.text, _passwordController.value.text);
 
       if (res.success != true) {
         setState(() {
-          errorMessage = res.message;
+          errorText = res.message;
         });
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', res.data['token']);
         await prefs.setString('username', res.data['username']);
-        await prefs.setBool('isActivated', res.data['isActivated']);
-        GoRouter.of(context).go('/verify-email');
+        await prefs.setBool('isActivate', res.data['isActivated']);
+        await prefs.setBool('isVerified', res.data['isVerified']);
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString(
+            'subscriptionEndDate', res.data['subscriptionEndDate'] ?? "");
+
+        if (res.data['isActivated']) {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/home');
+        } else {
+          // ignore: use_build_context_synchronously
+          GoRouter.of(context).go('/welcome');
+        }
       }
       setState(() {
         isLoading = false;
       });
     } catch (e) {
+      print('error: $e');
       setState(() {
         isLoading = false;
-        errorMessage = "Something went wrong";
+        errorText = "Something went wrong";
       });
     }
   }
@@ -60,6 +69,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
   }
 
+  Widget _buildForgotPasswordBtn() {
+    return TextButton(
+      onPressed: () {
+        // Add your code here to handle what happens when the user clicks the forgot password button
+      },
+      child: const Text(
+        'Forgot Password?',
+        style: TextStyle(
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRememberMeCheckbox() {
+    return SizedBox(
+      height: 20.0,
+      child: Row(
+        children: <Widget>[
+          Theme(
+            data: ThemeData(unselectedWidgetColor: Colors.white),
+            child: Checkbox(
+              value: _rememberMe,
+              checkColor: Colors.green,
+              activeColor: Colors.white,
+              onChanged: (value) {
+                setState(() {
+                  _rememberMe = value!;
+                });
+              },
+            ),
+          ),
+          const Text(
+            'Remember me',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
@@ -71,40 +127,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Logo(),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Material(
                         color: Colors.white,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Padding(
                               padding: EdgeInsets.all(10.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  'Sign up',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                              child: Text(
+                                'Sign in',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            errorMessage != null
+                            errorText != null
                                 ? Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        errorMessage!,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
-                                      ),
+                                    child: Text(
+                                      errorText!,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red),
                                     ),
                                   )
                                 : const SizedBox(
@@ -150,39 +201,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   padding: const EdgeInsets.only(
                                       bottom: 4, top: 6, left: 10),
                                   child: Text(
-                                    'Username',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.8),
-                                        fontSize: 14),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: TextField(
-                                      controller: _usernameController,
-                                      keyboardType: TextInputType.text,
-                                      decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor:
-                                              Colors.blueGrey.withOpacity(0.1),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 12),
-                                          hintText: 'john_doe',
-                                          hintStyle: const TextStyle(
-                                              color: Colors.grey),
-                                          border: InputBorder.none)),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 4, top: 6, left: 10),
-                                  child: Text(
                                     'Password',
                                     style: TextStyle(
                                         color: Colors.black.withOpacity(0.8),
@@ -210,40 +228,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 4, top: 6, left: 10),
-                                  child: Text(
-                                    'Confirm password',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.8),
-                                        fontSize: 14),
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: TextField(
-                                      obscureText: true,
-                                      controller: _confirmPasswordController,
-                                      keyboardType: TextInputType.text,
-                                      decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor:
-                                              Colors.blueGrey.withOpacity(0.1),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 12),
-                                          hintText: '***********',
-                                          hintStyle: const TextStyle(
-                                              color: Colors.grey),
-                                          border: InputBorder.none)),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       )
@@ -251,6 +235,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(
                     height: 40,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildRememberMeCheckbox(),
+                      _buildForgotPasswordBtn(),
+                    ],
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -266,7 +257,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           padding: const EdgeInsets.only(top: 18, bottom: 18),
                           child: !isLoading
                               ? const Text(
-                                  'Sign up',
+                                  'Sign in',
                                   style: TextStyle(fontSize: 14),
                                 )
                               : const SizedBox(
@@ -281,21 +272,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.white),
-                      elevation: MaterialStatePropertyAll(0),
-                    ),
-                    onPressed: () => GoRouter.of(context).go('/signin'),
-                    child: const Text(
-                      'I already have an account',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w500,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: const ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.white),
+                            elevation: MaterialStatePropertyAll(0)),
+                        onPressed: () => GoRouter.of(context).go('/signup'),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Forgot Password",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                "I don't have an account",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.red.shade600,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ]),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

@@ -41,7 +41,6 @@ void main() async {
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   bool isSubscribed = false;
 
-  print("a)isLoggedIn           $isLoggedIn");
   if (isLoggedIn) {
     //  Check subscription status
     Response res = await ApiClient.getSubscriptionStatus();
@@ -49,7 +48,6 @@ void main() async {
       isSubscribed = res.data['isAvailable'];
       prefs.setString('subscriptionEndDate', res.data['subscriptionEndDate']);
     } else {
-      print("a)_           $res");
       Fluttertoast.showToast(
           msg: "Aww! Something went wrong".toString(),
           toastLength: Toast.LENGTH_LONG,
@@ -88,7 +86,7 @@ GoRouter buildRouter(Widget InitialScreen) {
       builder: (context, state) => const PhoneNumbers(),
     ),
     GoRoute(
-      path: '/verifyEmail',
+      path: '/verify-email',
       builder: (context, state) => const VerifyEmailScreen(),
     ),
   ]);
