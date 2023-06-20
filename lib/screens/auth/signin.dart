@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:american_student_book/utils/toast.dart';
+import 'package:american_student_book/components/auth/text_field.dart';
+import 'package:american_student_book/components/auth/submit_button.dart';
+import 'package:american_student_book/components/auth/title_text.dart';
+import 'package:american_student_book/components/auth/errors.dart';
+import 'package:american_student_book/components/auth/text_link.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -19,13 +24,13 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool isLoading = false;
   bool _rememberMe = false;
-  String? errorText;
+  String errorText = "";
 
-  void submit() async {
+  void onSubmit() async {
     if (isLoading) return;
 
     setState(() {
-      errorText = null;
+      errorText = "";
       isLoading = true;
     });
 
@@ -35,11 +40,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
       // Validation
       if (email.isEmpty) {
-        updateState(isLoading: false, errorText: "Email is required.");
+        updateState(isLoading: false, errorText: "Email is empty.");
         return;
       }
       if (password.isEmpty) {
-        updateState(isLoading: false, errorText: "Email is required.");
+        updateState(isLoading: false, errorText: "Password is empty.");
         return;
       }
 
@@ -56,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void handleResponse(Response res) async {
     if (res.success != true) {
-      updateState(errorText: res.message);
+      updateState(errorText: res.message ?? "");
     } else {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('access_token', res.data['token']);
@@ -90,14 +95,14 @@ class _SignInScreenState extends State<SignInScreen> {
     updateState(isLoading: false);
   }
 
-  void updateState({String? errorText, bool? isLoading}) {
+  void updateState({String errorText = "", bool? isLoading}) {
     setState(() {
       this.errorText = errorText;
       this.isLoading = isLoading ?? this.isLoading;
     });
   }
 
-  void _onRememberMeChanged(bool? newValue) async {
+  void onRememberMeChanged(bool? newValue) async {
     bool rememberMe = newValue ?? false;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -128,93 +133,6 @@ class _SignInScreenState extends State<SignInScreen> {
     _loadSavedCredentials();
   }
 
-  Widget _buildTitle() {
-    return const Column(children: [
-      Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Text(
-          'Sign in',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ]);
-  }
-
-  Widget _buildErrorText() {
-    return Column(children: [
-      errorText != null
-          ? Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                errorText!,
-                style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
-              ),
-            )
-          : const SizedBox(
-              height: 6,
-            )
-    ]);
-  }
-
-  Widget _buildEmailTF() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 4, top: 6, left: 10),
-        child: Text(
-          'Email address',
-          style: TextStyle(color: Colors.black.withOpacity(0.8), fontSize: 14),
-        ),
-      ),
-      const SizedBox(height: 4),
-      ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: TextField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.blueGrey.withOpacity(0.1),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                hintText: 'john@doe.com',
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: InputBorder.none)),
-      ),
-    ]);
-  }
-
-  Widget _bulidPasswordTF() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 4, top: 6, left: 10),
-        child: Text(
-          'Password',
-          style: TextStyle(color: Colors.black.withOpacity(0.8), fontSize: 14),
-        ),
-      ),
-      const SizedBox(height: 4),
-      ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: TextField(
-            obscureText: true,
-            controller: _passwordController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.blueGrey.withOpacity(0.1),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                hintText: '***********',
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: InputBorder.none)),
-      )
-    ]);
-  }
-
   Widget _buildForgotPasswordBtn() {
     return TextButton(
       onPressed: () {
@@ -225,79 +143,6 @@ class _SignInScreenState extends State<SignInScreen> {
         style: TextStyle(
           color: Colors.black54,
           decoration: TextDecoration.underline,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRememberMeCheckbox() {
-    return SizedBox(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data:
-                ThemeData(unselectedWidgetColor: Colors.black.withOpacity(0.8)),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: Colors.red,
-              activeColor: Colors.white,
-              onChanged: _onRememberMeChanged,
-            ),
-          ),
-          const Text(
-            'Remember me',
-            style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLoginBtn() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.red),
-              elevation: MaterialStatePropertyAll(0)),
-          onPressed: () => submit(),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 18, bottom: 18),
-            child: !isLoading
-                ? const Text(
-                    'Sign in',
-                    style: TextStyle(fontSize: 14),
-                  )
-                : const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => GoRouter.of(context).go('/signup'),
-      child: RichText(
-        text: TextSpan(
-          text: "I don't have an account",
-          style: TextStyle(
-              fontSize: 14,
-              color: Colors.red.shade600,
-              fontWeight: FontWeight.w500),
         ),
       ),
     );
@@ -315,28 +160,57 @@ class _SignInScreenState extends State<SignInScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Logo(),
-                  const SizedBox(
-                    height: 20,
+                  const TitleText(title: 'Sign up'),
+                  Errors(errorText: errorText),
+                  BuildTextField(
+                    title: 'Email',
+                    hintText: "james@gmail.com",
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: false,
                   ),
-                  _buildTitle(),
-                  _buildErrorText(),
-                  _buildEmailTF(),
-                  _bulidPasswordTF(),
+                  BuildTextField(
+                    title: 'Password',
+                    hintText: "*********",
+                    controller: _passwordController,
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildRememberMeCheckbox(),
-                      _buildForgotPasswordBtn(),
+                      Flexible(
+                        flex: 1,
+                        child: CheckboxListTile(
+                          dense: true,
+                          title: const Text('Remember me'),
+                          value: _rememberMe,
+                          checkColor: Colors.red,
+                          activeColor: Colors.white,
+                          onChanged: onRememberMeChanged,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: _buildForgotPasswordBtn(),
+                      ),
                     ],
                   ),
                   const SizedBox(
                     height: 5.0,
                   ),
-                  _buildLoginBtn(),
-                  const SizedBox(
-                    height: 20.0,
+                  SubmitButton(
+                    isLoading: isLoading,
+                    onPressed: onSubmit,
+                    buttonText: 'Sign in',
                   ),
-                  _buildSignupBtn(),
+                  const SizedBox(height: 20.0),
+                  const TextLink(
+                    text: "I don't have an account.",
+                    link: '/signup',
+                  ),
                 ],
               ),
             ),

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:american_student_book/screens/auth/signin.dart';
 import 'package:american_student_book/screens/auth/signup.dart';
 import 'package:american_student_book/screens/auth/subscription.dart';
-import 'package:american_student_book/screens/auth/verifyEmail.dart';
+import 'package:american_student_book/screens/auth/verify_email.dart';
 import 'package:american_student_book/screens/home/index.dart';
 import 'package:american_student_book/screens/phonenumbers/index.dart';
 import 'package:american_student_book/utils/permissionsHandler.dart';
