@@ -1,3 +1,6 @@
+import 'package:american_student_book/screens/auth/change_password.dart';
+import 'package:american_student_book/screens/auth/enter_code.dart';
+import 'package:american_student_book/screens/auth/forgot_password.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -74,20 +77,32 @@ GoRouter buildRouter(Widget InitialScreen) {
       builder: (context, state) => const SignInScreen(),
     ),
     GoRoute(
-      path: '/welcome',
-      builder: (context, state) => const SubscribePage(),
-    ),
-    GoRoute(
       path: '/signup',
       builder: (context, state) => const SignUpScreen(),
     ),
     GoRoute(
-      path: '/phonebook',
-      builder: (context, state) => const PhoneNumbers(),
-    ),
-    GoRoute(
       path: '/verify-email',
       builder: (context, state) => const VerifyEmailScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password/send-request',
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password/enter-code',
+      builder: (context, state) => const EnterCodeScreen(),
+    ),
+    GoRoute(
+      path: '/change-password',
+      builder: (context, state) => const ChangePasswordScreen(),
+    ),
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) => const SubscribePage(),
+    ),
+    GoRoute(
+      path: '/phonebook',
+      builder: (context, state) => const PhoneNumbers(),
     ),
   ]);
 }

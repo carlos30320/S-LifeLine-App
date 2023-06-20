@@ -10,15 +10,13 @@ import 'package:american_student_book/components/auth/title_text.dart';
 import 'package:american_student_book/components/auth/errors.dart';
 import 'package:american_student_book/components/auth/text_link.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -32,25 +30,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
         errorText = "";
         isLoading = true;
       });
-      Response res = await ApiClient.signUp(
-          _usernameController.value.text,
-          _emailController.value.text,
-          _passwordController.value.text,
-          _confirmPasswordController.value.text);
+
+      String password = _passwordController.text;
+      String confirmPassword = _confirmPasswordController.text;
+
+      if (password != confirmPassword) {
+        setState(() {
+          errorText = "Passwords do not match.";
+          isLoading = false;
+        });
+        return;
+      }
+
+      Response res = await ApiClient.udpatePassword(password);
 
       if (res.success != true) {
         setState(() {
-          isLoading = false;
           errorText = res.message!;
         });
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('access_token', res.data['token']);
-        await prefs.setString('username', res.data['username']);
-        await prefs.setBool('isActivated', res.data['isActivated']);
+        await prefs.remove('access_token');
+        await prefs.remove('email');
         // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/verify-email');
+        GoRouter.of(context).go('/signin');
       }
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -76,22 +83,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Logo(),
-                  const TitleText(title: 'Sign up'),
+                  const TitleText(title: 'Change password'),
                   Errors(errorText: errorText),
-                  BuildTextField(
-                    title: 'Email',
-                    hintText: "james@gmail.com",
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                  ),
-                  BuildTextField(
-                    title: 'Username',
-                    hintText: "James",
-                    controller: _usernameController,
-                    keyboardType: TextInputType.text,
-                    obscureText: false,
-                  ),
                   BuildTextField(
                     title: 'Password',
                     hintText: "*********",
@@ -106,15 +99,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboardType: TextInputType.text,
                     obscureText: true,
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
                   SubmitButton(
                     isLoading: isLoading,
                     onPressed: onSubmit,
-                    buttonText: 'Sign up',
+                    buttonText: 'Update',
                   ),
                   const SizedBox(height: 20.0),
                   const TextLink(
-                    text: "I already have an account.",
+                    text: "Go to Sign in",
                     link: '/signin',
                   ),
                   const SizedBox(height: 20.0),

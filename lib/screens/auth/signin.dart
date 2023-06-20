@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void handleResponse(Response res) async {
     if (res.success != true) {
-      updateState(errorText: res.message ?? "");
+      updateState(isLoading: false, errorText: res.message.toString());
     } else {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('access_token', res.data['token']);
@@ -72,27 +72,22 @@ class _SignInScreenState extends State<SignInScreen> {
       await prefs.setString(
           'subscriptionEndDate', res.data['subscriptionEndDate'] ?? '');
 
-      if (!res.data['isVerified']) {
-        showToast("Your email is not verified.", status: ToastStatus.warning);
-        // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/verify-email');
-      } else if (!res.data['isActivated']) {
+      if (_rememberMe) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("email", _emailController.value.text);
+        prefs.setString("password", _passwordController.value.text);
+      }
+
+      if (!res.data['isActivated']) {
         showToast("You didn't subscribe yet.", status: ToastStatus.warning);
         // ignore: use_build_context_synchronously
         GoRouter.of(context).go('/welcome');
       } else {
-        if (_rememberMe) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString("email", _emailController.value.text);
-          prefs.setString("password", _passwordController.value.text);
-        }
-
-        showToast("Login Success.", status: ToastStatus.success);
         // ignore: use_build_context_synchronously
         GoRouter.of(context).go('/home');
       }
+      updateState(isLoading: false);
     }
-    updateState(isLoading: false);
   }
 
   void updateState({String errorText = "", bool? isLoading}) {
@@ -136,7 +131,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget _buildForgotPasswordBtn() {
     return TextButton(
       onPressed: () {
-        // Add your code here to handle what happens when the user clicks the forgot password button
+        GoRouter.of(context).go('/forgot-password/send-request');
       },
       child: const Text(
         'Forgot Password?',
@@ -160,7 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Logo(),
-                  const TitleText(title: 'Sign up'),
+                  const TitleText(title: 'Sign in'),
                   Errors(errorText: errorText),
                   BuildTextField(
                     title: 'Email',

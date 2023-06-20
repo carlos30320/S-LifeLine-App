@@ -69,7 +69,7 @@ class _WelcomeDialogState extends State<WelcomeDialog> {
                   ),
                   pay == false
                       ? Text(
-                          '''Subscribe to one of America's most efficient. and reasonably priced Emergency Alert Systems that can save a loved one from the worry of being alone when in trouble, without a means to reach out to those who care most for their well being and safety, only 12.00USD a year, instantly alerts up to three contacts simultaneously...subscribe below: ''',
+                          '''Subscribe to one of America's most efficient. and reasonably priced Emergency Alert Systems that can save a loved one from the worry of being alone when in trouble, without a means to reach out to those who care most for their well being and safety, only \$12.00USD a year, instantly alerts up to three contacts simultaneously...subscribe below: ''',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 16,

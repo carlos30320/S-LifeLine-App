@@ -49,6 +49,36 @@ class ApiClient {
     return Response.fromJson(jsonDecode(res.body));
   }
 
+  static Future<Response> sendForgotPasswordRequest(String email) async {
+    var res = await client
+        .post(Uri.https(baseUrl, 'auth/forgot-password/send-request'),
+            body: jsonEncode({
+              "email": email.toString(),
+            }),
+            headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+        });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
+  static Future<Response> confirmForgotPasswordCode(
+      String email, String code) async {
+    var res = await client
+        .post(Uri.https(baseUrl, 'auth/forgot-password/confirm-code'),
+            body: jsonEncode({
+              "email": email,
+              "code": code,
+            }),
+            headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+        });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
   static Future<Response> resendVerificationCode() async {
     var res = await client
         .post(Uri.https(baseUrl, 'auth/resend-verification-code'), headers: {
@@ -56,6 +86,17 @@ class ApiClient {
       'Authorization':
           '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
     });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
+  static Future<Response> udpatePassword(String password) async {
+    var res = await client.put(Uri.https(baseUrl, 'auth/update-password'),
+        body: jsonEncode({"password": password}),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+        });
     return Response.fromJson(jsonDecode(res.body));
   }
 
