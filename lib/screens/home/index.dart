@@ -7,14 +7,12 @@ import 'package:american_student_book/utils/factories.dart';
 import 'package:american_student_book/utils/toast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:background_sms/background_sms.dart';
 import 'package:american_student_book/utils/formatDateTime.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -81,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Check if the user is logged in
       String username = prefs.getString('username') ?? "";
-      String message = '$username is asking for help at $location';
+      String message = 'Emergency situation at $location. Name: $username. Assistance required.';
 
       Response res = await ApiClient.getContacts();
       if (res.success == true) {
@@ -91,24 +89,24 @@ class _HomeScreenState extends State<HomeScreen> {
           showToast("You have no number registered",
               status: ToastStatus.warning);
         } else {
-          nums.forEach((element) async {
-            SmsStatus result = await BackgroundSms.sendMessage(
-                phoneNumber: element['phoneNumber'],
-                message: message,
-                simSlot: 1);
+          List<String> recipients = nums.map<String>((contact) => contact['phoneNumber'].toString()).toList();
+          print('recipients $recipients');
 
-            if (result == SmsStatus.sent) {
-              showToast(
-                "Message sent to ${element['name']}(${element['phoneNumber']}).",
-                status: ToastStatus.success,
-              );
-            } else {
-              showToast(
-                "Failed to send message to ${element['name']}(${element['phoneNumber']}).",
-                status: ToastStatus.error,
-              );
-            }
-          });
+          try {
+            String result = await sendSMS(message: message, recipients: recipients, sendDirect: true);
+            print(result);
+
+            showToast(
+              "Sent Alert.",
+              status: ToastStatus.success,
+            );
+          } catch(e) {
+                print(e);
+            showToast(
+              "Sending alert failed.",
+              status: ToastStatus.error,
+            );
+          }
         }
       } else {
         showToast(

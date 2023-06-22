@@ -20,7 +20,6 @@ dependencies:
   http:
   permission_handler:
   phone_number:
-  background_sms:
   fluttertoast:
   google_maps_flutter:
   url_launcher:
