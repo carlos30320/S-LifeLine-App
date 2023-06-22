@@ -4,6 +4,7 @@ import 'package:american_student_book/layout/common_scaffold.dart';
 import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
+import 'package:american_student_book/utils/toast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -87,47 +88,33 @@ class _HomeScreenState extends State<HomeScreen> {
         var nums = res.data['contacts'];
 
         if (nums.length == 0) {
-          Fluttertoast.showToast(
-              msg: "You have no number registered".toString(),
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red.shade900,
-              textColor: Colors.white,
-              fontSize: 14.0);
+          showToast("You have no number registered",
+              status: ToastStatus.warning);
         } else {
           nums.forEach((element) async {
             SmsStatus result = await BackgroundSms.sendMessage(
                 phoneNumber: element['phoneNumber'],
                 message: message,
                 simSlot: 1);
+
             if (result == SmsStatus.sent) {
-              Fluttertoast.showToast(
-                msg:
-                    "Message sent to ${element['name']}(${element['phoneNumber']}).",
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
+              showToast(
+                "Message sent to ${element['name']}(${element['phoneNumber']}).",
+                status: ToastStatus.success,
               );
             } else {
-              Fluttertoast.showToast(
-                msg:
-                    "Failed to send message to ${element['name']}(${element['phoneNumber']}).",
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
+              showToast(
+                "Failed to send message to ${element['name']}(${element['phoneNumber']}).",
+                status: ToastStatus.error,
               );
             }
           });
         }
       } else {
-        Fluttertoast.showToast(
-            msg: "Aww! Something went wrong while getting phone numbers"
-                .toString(),
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red.shade900,
-            textColor: Colors.white,
-            fontSize: 14.0);
+        showToast(
+          "Aww! Something went wrong while getting phone numbers",
+          status: ToastStatus.error,
+        );
       }
     } else {
       await requestSmsPermission();
@@ -156,13 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context) => Dialog(
             child: Image.asset(pic),
           ));
-
-  Future<void> logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('access_token');
-    prefs.remove('username');
-    GoRouter.of(context).go('/signin');
-  }
 
   @override
   Widget build(BuildContext context) {

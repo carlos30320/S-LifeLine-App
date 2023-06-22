@@ -2,6 +2,7 @@ import 'package:american_student_book/components/contact.dart';
 import 'package:american_student_book/layout/common_scaffold.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
+import 'package:american_student_book/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart'
@@ -78,14 +79,7 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
           }
         });
       } else {
-        Fluttertoast.showToast(
-            msg: "Something went wrong".toString(),
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red.shade900,
-            textColor: Colors.white,
-            fontSize: 14.0);
+        showToast("Something went wrong", status: ToastStatus.error);
       }
     }
   }
@@ -182,14 +176,7 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
             List.generate(nums.length, (index) => toPhoneNumber(nums[index]));
       });
     } else {
-      Fluttertoast.showToast(
-          msg: "Aww! Something went wrong".toString(),
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red.shade900,
-          textColor: Colors.white,
-          fontSize: 14.0);
+      showToast("Aww! Something went wrong", status: ToastStatus.error);
     }
   }
 
@@ -253,7 +240,6 @@ class _PhoneNumbersState extends State<PhoneNumbers> {
                                 Response res = await ApiClient.addContact(
                                     newnumber!.name, newnumber.phonenumber);
                                 if (res.success == true) {
-                                  print("asdfasdfasdfasdfasdf ${res.data}");
                                   var thisNumber = PhoneNumber(
                                       id: res.data['_id'],
                                       name: res.data['name'],
