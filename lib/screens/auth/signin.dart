@@ -12,7 +12,7 @@ import 'package:american_student_book/components/auth/title_text.dart';
 import 'package:american_student_book/components/auth/errors.dart';
 import 'package:american_student_book/components/auth/text_link.dart';
 
-import '../../components/exit_dialog.dart';
+
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -190,7 +190,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:onwilllpop() ,
+      onWillPop:onwilllpop ,
       child: Scaffold(
           backgroundColor: Colors.white,
           body: ListView(children: [
