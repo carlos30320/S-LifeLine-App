@@ -21,6 +21,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+
+
+
+
+
   String location = "Detecting location...";
   String log = "Your membership will end on 25th July";
   DataStore ds = DataStore.getInstance();

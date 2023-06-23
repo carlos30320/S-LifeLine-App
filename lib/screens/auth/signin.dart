@@ -12,6 +12,8 @@ import 'package:american_student_book/components/auth/title_text.dart';
 import 'package:american_student_book/components/auth/errors.dart';
 import 'package:american_student_book/components/auth/text_link.dart';
 
+import '../../components/exit_dialog.dart';
+
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
   @override
@@ -19,6 +21,48 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+
+  Future<bool>onwilllpop ( )   async {
+
+    return await showDialog(context: context, builder:(context) {
+
+
+      return AlertDialog(
+
+        title: Text('Exit App'),
+        content: Text('Are you sure you want to exit?'),
+        actions: [
+          TextButton(
+            child: Text('No'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: Text('Yes'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+
+
+
+
+
+
+
+
+
+
+
+      );
+
+    },);
+
+
+  }
+
+
+
+
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -145,71 +189,74 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: ListView(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 56, left: 16, right: 16),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Logo(),
-                  const TitleText(title: 'Sign in'),
-                  Errors(errorText: errorText),
-                  BuildTextField(
-                    title: 'Email',
-                    hintText: "james@gmail.com",
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                  ),
-                  BuildTextField(
-                    title: 'Password',
-                    hintText: "*********",
-                    controller: _passwordController,
-                    keyboardType: TextInputType.text,
-                    obscureText: true,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: CheckboxListTile(
-                          dense: true,
-                          title: const Text('Remember me'),
-                          value: _rememberMe,
-                          checkColor: Colors.red,
-                          activeColor: Colors.white,
-                          onChanged: onRememberMeChanged,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          contentPadding: EdgeInsets.zero,
+    return WillPopScope(
+      onWillPop:onwilllpop() ,
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: ListView(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 56, left: 16, right: 16),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Logo(),
+                    const TitleText(title: 'Sign in'),
+                    Errors(errorText: errorText),
+                    BuildTextField(
+                      title: 'Email',
+                      hintText: "james@gmail.com",
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: false,
+                    ),
+                    BuildTextField(
+                      title: 'Password',
+                      hintText: "*********",
+                      controller: _passwordController,
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: CheckboxListTile(
+                            dense: true,
+                            title: const Text('Remember me'),
+                            value: _rememberMe,
+                            checkColor: Colors.red,
+                            activeColor: Colors.white,
+                            onChanged: onRememberMeChanged,
+                            controlAffinity: ListTileControlAffinity.leading,
+                            contentPadding: EdgeInsets.zero,
+                          ),
                         ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: _buildForgotPasswordBtn(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  SubmitButton(
-                    isLoading: isLoading,
-                    onPressed: onSubmit,
-                    buttonText: 'Sign in',
-                  ),
-                  const SizedBox(height: 20.0),
-                  const TextLink(
-                    text: "I don't have an account.",
-                    link: '/signup',
-                  ),
-                ],
+                        Flexible(
+                          flex: 1,
+                          child: _buildForgotPasswordBtn(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    SubmitButton(
+                      isLoading: isLoading,
+                      onPressed: onSubmit,
+                      buttonText: 'Sign in',
+                    ),
+                    const SizedBox(height: 20.0),
+                    const TextLink(
+                      text: "I don't have an account.",
+                      link: '/signup',
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ]));
+          ])),
+    );
   }
 }
