@@ -24,15 +24,15 @@ class _SignInScreenState extends State<SignInScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Exit App'),
-          content: Text('Are you sure you want to exit?'),
+          title: const Text('Exit App'),
+          content: const Text('Are you sure you want to exit?'),
           actions: [
             TextButton(
-              child: Text('No'),
+              child: const Text('No'),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Yes'),
+              child: const Text('Yes'),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -100,7 +100,11 @@ class _SignInScreenState extends State<SignInScreen> {
         prefs.setString("password", _passwordController.value.text);
       }
 
-      if (!res.data['isActivated']) {
+      if (!res.data['isVerified']) {
+        showToast("Email is not verified.", status: ToastStatus.warning);
+        // ignore: use_build_context_synchronously
+        GoRouter.of(context).go('/verify-email');
+      } else if (!res.data['isActivated']) {
         showToast("You didn't subscribe yet.", status: ToastStatus.warning);
         // ignore: use_build_context_synchronously
         GoRouter.of(context).go('/welcome');

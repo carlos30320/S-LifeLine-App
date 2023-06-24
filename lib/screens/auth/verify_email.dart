@@ -122,6 +122,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                     onPressed: onSubmit,
                     buttonText: 'Verify email',
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   const TextLink(
                     text: "Change email",
                     link: '/signup',
