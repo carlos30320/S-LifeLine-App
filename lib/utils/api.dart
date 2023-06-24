@@ -148,6 +148,16 @@ class ApiClient {
     return Response.fromJson(jsonDecode(res.body));
   }
 
+  static Future<Response> sendSOSSMS(location) async {
+    var res = await client.post(Uri.https(baseUrl, 'contacts/send-sos-sms'),
+        body: jsonEncode({"location": location.toString()}),
+        headers: {
+          'Authorization':
+              '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
+        });
+    return Response.fromJson(jsonDecode(res.body));
+  }
+
   // static Future<Response> createorder() async {
   //   var res =
   //       await client.post(Uri.https(baseUrl, '/paypal/create-order'), headers: {

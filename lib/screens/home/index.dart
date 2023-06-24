@@ -12,7 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:american_student_book/utils/formatDateTime.dart';
-import 'package:flutter_sms/flutter_sms.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,49 +20,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  Future<bool>onwilllpop ( )   async {
-
-    return await showDialog(context: context, builder:(context) {
-
-
-      return AlertDialog(
-
-        title: Text('Exit App'),
-        content: Text('Are you sure you want to exit?'),
-        actions: [
-          TextButton(
-            child: Text('No'),
-            onPressed: () => Navigator.of(context).pop(false),
-          ),
-          TextButton(
-            child: Text('Yes'),
-            onPressed: () => Navigator.of(context).pop(true),
-          ),
-        ],
-
-
-
-
-
-
-
-
-
-
-
-      );
-
-    },);
-
-
+  Future<bool> onwilllpop() async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Exit App'),
+          content: const Text('Are you sure you want to exit?'),
+          actions: [
+            TextButton(
+              child: const Text('No'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
   }
-
-
-
-
-
-
 
   String location = "Detecting location...";
   String log = "Your membership will end on 25th July";
@@ -119,42 +96,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _sendSMS() async {
     if (await Permission.sms.isGranted) {
-      final prefs = await SharedPreferences.getInstance();
-
-      // Check if the user is logged in
-      String username = prefs.getString('username') ?? "";
-      String message = 'Emergency situation at $location. Name: $username. Assistance required.';
-
-      Response res = await ApiClient.getContacts();
-      if (res.success == true) {
-        var nums = res.data['contacts'];
-
-        if (nums.length == 0) {
-          showToast("You have no number registered",
-              status: ToastStatus.warning);
+      try {
+        Response res = await ApiClient.sendSOSSMS(location);
+        if (res.success == true) {
+          showToast(
+            "Sent Alert.",
+            status: ToastStatus.success,
+          );
         } else {
-          List<String> recipients = nums.map<String>((contact) => contact['phoneNumber'].toString()).toList();
-          print('recipients $recipients');
-
-          try {
-            String result = await sendSMS(message: message, recipients: recipients, sendDirect: true);
-            print(result);
-
-            showToast(
-              "Sent Alert.",
-              status: ToastStatus.success,
-            );
-          } catch(e) {
-                print(e);
-            showToast(
-              "Sending alert failed.",
-              status: ToastStatus.error,
-            );
-          }
+          showToast(
+            "Sending alert failed.",
+            status: ToastStatus.error,
+          );
         }
-      } else {
+      } catch (e) {
+        print(e);
         showToast(
-          "Aww! Something went wrong while getting phone numbers",
+          "Sending alert failed.",
           status: ToastStatus.error,
         );
       }
@@ -190,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: onwilllpop,
-       child: PageWrapper(
+      child: PageWrapper(
         title: 'Home',
         floatingActionButton: Container(
           width: MediaQuery.of(context).size.width * 0.92,
@@ -250,8 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             )
                             .toList(),
-                        options:
-                            CarouselOptions(height: 340, animateToClosest: true)),
+                        options: CarouselOptions(
+                            height: 340, animateToClosest: true)),
                     const SizedBox(
                       height: 6,
                     ),

@@ -12,8 +12,6 @@ import 'package:american_student_book/components/auth/title_text.dart';
 import 'package:american_student_book/components/auth/errors.dart';
 import 'package:american_student_book/components/auth/text_link.dart';
 
-
-
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
   @override
@@ -21,47 +19,27 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-
-  Future<bool>onwilllpop ( )   async {
-
-    return await showDialog(context: context, builder:(context) {
-
-
-      return AlertDialog(
-
-        title: Text('Exit App'),
-        content: Text('Are you sure you want to exit?'),
-        actions: [
-          TextButton(
-            child: Text('No'),
-            onPressed: () => Navigator.of(context).pop(false),
-          ),
-          TextButton(
-            child: Text('Yes'),
-            onPressed: () => Navigator.of(context).pop(true),
-          ),
-        ],
-
-
-
-
-
-
-
-
-
-
-
-      );
-
-    },);
-
-
+  Future<bool> onwilllpop() async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Exit App'),
+          content: Text('Are you sure you want to exit?'),
+          actions: [
+            TextButton(
+              child: Text('No'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
   }
-
-
-
-
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -190,7 +168,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:onwilllpop ,
+      onWillPop: onwilllpop,
       child: Scaffold(
           backgroundColor: Colors.white,
           body: ListView(children: [
