@@ -5,6 +5,7 @@ import 'package:american_student_book/store/store.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
 import 'package:american_student_book/utils/toast.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,7 +20,50 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  bool _isLoading = false;
+  bool _isPlaying = false;
+  final player = AudioPlayer();
+
+  String location = "Detecting location...";
+  String subscriptionEndDate = "";
+
+  DataStore ds = DataStore.getInstance();
+  // ignore: unused_field
+  final Completer<GoogleMapController> _controller = Completer();
+  bool locationPermitted = false;
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _startLoading() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    _sendSMS();
+
+    setState(() {
+      _isLoading = false;
+      _isPlaying = true;
+      _animationController.forward();
+      _playSound();
+    });
+  }
+
+  void _stopPlaying() {
+    setState(() {
+      _isPlaying = false;
+      _animationController.reverse();
+      _stopSound();
+    });
+  }
+
   Future<bool> onwilllpop() async {
     return await showDialog(
       context: context,
@@ -42,25 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String location = "Detecting location...";
-  String log = "Your membership will end on 25th July";
-  DataStore ds = DataStore.getInstance();
-  // ignore: unused_field
-  final Completer<GoogleMapController> _controller = Completer();
-  bool smsPermitted = false;
-  bool locationPermitted = false;
-  String subscriptionEndDate = "";
-
-  Future<void> requestSmsPermission() async {
-    if (await Permission.sms.isDenied) {
-      await Permission.sms.request();
-    } else {
-      setState(() {
-        smsPermitted = true;
-      });
-    }
-  }
-
   Future<void> getCurrentLocation() async {
     if (ds.location.isSet()) {
       setState(() {
@@ -70,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     await Geolocator.requestPermission();
     if (await Permission.location.isDenied) {
-      await requestSmsPermission();
       await getCurrentLocation();
     } else {
       setState(() {
@@ -90,35 +114,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getSubscriptionStatus() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Check if the user is logged in
-    subscriptionEndDate = prefs.getString('subscriptionEndDate') ?? "";
+    setState(() {
+      subscriptionEndDate = prefs.getString('subscriptionEndDate') ?? "";
+    });
   }
 
   void _sendSMS() async {
-    if (await Permission.sms.isGranted) {
-      try {
-        Response res = await ApiClient.sendSOSSMS(location);
-        if (res.success == true) {
-          showToast(
-            "Sent Alert.",
-            status: ToastStatus.success,
-          );
-        } else {
-          showToast(
-            "Sending alert failed.",
-            status: ToastStatus.error,
-          );
-        }
-      } catch (e) {
-        print(e);
+    try {
+      Response res = await ApiClient.sendSOSSMS(location);
+      if (res.success == true) {
+        showToast(
+          "Sent Alert.",
+          status: ToastStatus.success,
+        );
+      } else {
         showToast(
           "Sending alert failed.",
           status: ToastStatus.error,
         );
       }
-    } else {
-      await requestSmsPermission();
-      _sendSMS();
+    } catch (e) {
+      print(e);
+      showToast(
+        "Sending alert failed.",
+        status: ToastStatus.error,
+      );
     }
   }
 
@@ -128,21 +148,39 @@ class _HomeScreenState extends State<HomeScreen> {
     if (token == null) throw Exception("Not authenticated");
   }
 
-  @override
-  void initState() {
-    checkAuthStatus().then((value) async {
-      await requestSmsPermission();
-      await getSubscriptionStatus();
-      await getCurrentLocation();
-    });
-    super.initState();
-  }
-
   Future showPic(String pic) => showDialog(
       context: context,
       builder: (context) => Dialog(
             child: Image.asset(pic),
           ));
+
+  void _playSound() async {
+    await player.play(
+      'https://assets.mixkit.co/active_storage/sfx/1642/1642-preview.mp3',
+      isLocal: true,
+    );
+
+    player.onPlayerCompletion.listen((_) {
+      // Call the same function again when the playback is complete
+      _playSound();
+    });
+  }
+
+  void _stopSound() async {
+    player.stop();
+  }
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+
+    checkAuthStatus().then((value) async {
+      await getSubscriptionStatus();
+      await getCurrentLocation();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +194,59 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
           ),
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.red.shade700),
-                elevation: const MaterialStatePropertyAll(0)),
-            onPressed: () => _sendSMS(),
-            child: const Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
-              child: Text(
-                'Send Alert',
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500),
-              ),
+//           child: ElevatedButton(
+//             style: ButtonStyle(
+//                 backgroundColor: MaterialStatePropertyAll(Colors.red.shade700),
+//                 elevation: const MaterialStatePropertyAll(0)),
+//             onPressed: () {
+//               // Show the alert modal
+//               showDialog(
+//                   context: context,
+//                   builder: (BuildContext context) => AlertModal());
+// // _sendSMS();
+//             },
+//             child: const Padding(
+//               padding: EdgeInsets.only(top: 20, bottom: 20),
+//               child: Text(
+//                 'Send Alert',
+//                 style: TextStyle(
+//                     fontSize: 18,
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.w500),
+//               ),
+//             ),
+//           ),
+          child: Stack(alignment: Alignment.center, children: [
+            AnimatedBuilder(
+              animation: _animationController,
+              builder: (BuildContext context, Widget? child) {
+                return Container(
+                    width: 150.0 + _animationController.value * 100.0,
+                    height: 150.0 + _animationController.value * 100.0,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.red));
+              },
             ),
-          ),
+            _isLoading && !_isPlaying
+                ? const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )
+                : !_isPlaying
+                    ? TextButton(
+                        onPressed: _startLoading,
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          textStyle: const TextStyle(fontSize: 25),
+                        ),
+                        child: const Text("SOS"))
+                    : TextButton(
+                        onPressed: _stopPlaying,
+                        style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            textStyle: const TextStyle(fontSize: 25)),
+                        child: const Icon(Icons.pause,
+                            color: Colors.white, size: 30.0))
+          ]),
         ),
         body: Material(
           child: Container(

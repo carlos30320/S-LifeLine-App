@@ -21,7 +21,6 @@ void requestPermissionsAndRunApp() async {
   // Request the necessary permissions
   bool permissionsGranted = await PermissionHandler.requestPermissions([
     Permission.location,
-    Permission.sms,
   ]);
 
   if (permissionsGranted) {

@@ -28,15 +28,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void onSubmit() async {
     try {
       if (isLoading) return;
+
+      String username = _usernameController.value.text;
+      String email = _emailController.value.text;
+      String password = _passwordController.value.text;
+      String password2 = _confirmPasswordController.value.text;
+
+      // Check Valudation
+      if (email.isEmpty) {
+        setState(() {
+          errorText = "Email is required.";
+          isLoading = false;
+        });
+        return;
+      }
+      if (username.isEmpty) {
+        setState(() {
+          errorText = "Username is required.";
+          isLoading = false;
+        });
+        return;
+      }
+      if (password.isEmpty) {
+        setState(() {
+          errorText = "Password is required.";
+          isLoading = false;
+        });
+        return;
+      }
+      if (password2.isEmpty) {
+        setState(() {
+          errorText = "Confirm Password is required.";
+          isLoading = false;
+        });
+        return;
+      }
+      if (password2 != password) {
+        setState(() {
+          errorText = "Passwords do not match.";
+          isLoading = false;
+        });
+        return;
+      }
+
+      // Set Loading
       setState(() {
         errorText = "";
         isLoading = true;
       });
-      Response res = await ApiClient.signUp(
-          _usernameController.value.text,
-          _emailController.value.text,
-          _passwordController.value.text,
-          _confirmPasswordController.value.text);
+      Response res =
+          await ApiClient.signUp(username, email, password, password2);
 
       if (res.success != true) {
         setState(() {

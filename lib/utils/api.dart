@@ -148,10 +148,13 @@ class ApiClient {
     return Response.fromJson(jsonDecode(res.body));
   }
 
-  static Future<Response> sendSOSSMS(location) async {
+  static Future<Response> sendSOSSMS(String location) async {
     var res = await client.post(Uri.https(baseUrl, 'contacts/send-sos-sms'),
-        body: jsonEncode({"location": location.toString()}),
+        body: jsonEncode({
+          "location": location.toString(),
+        }),
         headers: {
+          'Content-Type': 'application/json',
           'Authorization':
               '${await SharedPreferences.getInstance().then((value) => value.getString('access_token'))}'
         });
