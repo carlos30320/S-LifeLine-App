@@ -22,9 +22,10 @@ dependencies:
   fluttertoast:
   google_maps_flutter:
   url_launcher:
-  flutter_paypal: 0.2.0
   http_auth:
   audioplayers: ^0.20.1
+  flutter_paypal: 0.2.0
+  pay: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -11,6 +11,7 @@ import 'package:american_student_book/components/auth/submit_button.dart';
 import 'package:american_student_book/components/auth/title_text.dart';
 import 'package:american_student_book/components/auth/errors.dart';
 import 'package:american_student_book/components/auth/text_link.dart';
+import 'package:american_student_book/components/copy_rights_text.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -234,6 +235,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       text: "I don't have an account.",
                       link: '/signup',
                     ),
+                    const CopyRightsText()
                   ],
                 ),
               ),

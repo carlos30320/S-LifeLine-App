@@ -97,7 +97,7 @@ GoRouter buildRouter(Widget InitialScreen) {
     ),
     GoRoute(
       path: '/welcome',
-      builder: (context, state) => const SubscribePage(),
+      builder: (context, state) => const Subscription(),
     ),
     GoRoute(
       path: '/phonebook',
@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
     Widget initialScreen = isLoggedIn == true
         ? isSubscribed == true
             ? const HomeScreen()
-            : const SubscribePage()
+            : const Subscription()
         : const SignInScreen();
 
     return MaterialApp.router(

@@ -1,3 +1,4 @@
+import 'package:american_student_book/components/copy_rights_text.dart';
 import 'package:american_student_book/components/logo.dart';
 import 'package:american_student_book/utils/api.dart';
 import 'package:american_student_book/utils/factories.dart';
@@ -158,7 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     text: "I already have an account.",
                     link: '/signin',
                   ),
-                  const SizedBox(height: 20.0),
+                  const CopyRightsText()
                 ],
               ),
             ),
