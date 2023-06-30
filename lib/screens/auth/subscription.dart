@@ -1,12 +1,12 @@
-import 'package:american_student_book/components/auth/text_link.dart';
+import 'package:student_lifeline/components/auth/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:american_student_book/components/logo.dart';
+import 'package:student_lifeline/components/logo.dart';
 import 'package:pay/pay.dart';
-import 'package:american_student_book/config/subscription.dart';
+import 'package:student_lifeline/config/subscription.dart';
 import 'dart:io';
 
 import '../../utils/api.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:american_student_book/layout/common_scaffold.dart';
-import 'package:american_student_book/store/store.dart';
-import 'package:american_student_book/utils/api.dart';
-import 'package:american_student_book/utils/factories.dart';
-import 'package:american_student_book/utils/toast.dart';
+import 'package:student_lifeline/layout/common_scaffold.dart';
+import 'package:student_lifeline/store/store.dart';
+import 'package:student_lifeline/utils/api.dart';
+import 'package:student_lifeline/utils/factories.dart';
+import 'package:student_lifeline/utils/toast.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:american_student_book/utils/formatDateTime.dart';
+import 'package:student_lifeline/utils/formatDateTime.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

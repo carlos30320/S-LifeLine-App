@@ -1,6 +1,6 @@
 {
-    "name": "american_student_book",
-    "short_name": "american_student_book",
+    "name": "student_lifeline",
+    "short_name": "student_lifeline",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

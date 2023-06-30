@@ -18,7 +18,7 @@
 	<array>
 	    <dict>
 	        <key>CFBundleURLName</key>
-	        <string>com.example.american_student_book</string>
+	        <string>com.example.student_lifeline</string>
 	        <key>CFBundleURLSchemes</key>
 	        <array>
 	            <string>studentLifeline</string>

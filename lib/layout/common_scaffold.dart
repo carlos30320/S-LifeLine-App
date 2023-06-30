@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:american_student_book/components/navbar.dart';
+import 'package:student_lifeline/components/navbar.dart';
 
 class PageWrapper extends StatelessWidget {
   final String? title;

@@ -1,4 +1,4 @@
-package com.example.american_student_book
+package com.example.student_lifeline
 
 import io.flutter.embedding.android.FlutterActivity
 

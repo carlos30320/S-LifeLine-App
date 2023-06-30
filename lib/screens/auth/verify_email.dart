@@ -1,17 +1,17 @@
-import 'package:american_student_book/components/auth/text_link.dart';
-import 'package:american_student_book/components/logo.dart';
-import 'package:american_student_book/utils/api.dart';
-import 'package:american_student_book/utils/factories.dart';
+import 'package:student_lifeline/components/auth/text_link.dart';
+import 'package:student_lifeline/components/logo.dart';
+import 'package:student_lifeline/utils/api.dart';
+import 'package:student_lifeline/utils/factories.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:american_student_book/components/auth/errors.dart';
-import 'package:american_student_book/components/auth/resend_code_button.dart';
-import 'package:american_student_book/components/auth/submit_button.dart';
-import 'package:american_student_book/components/auth/text_field.dart';
-import 'package:american_student_book/components/auth/title_text.dart';
+import 'package:student_lifeline/components/auth/errors.dart';
+import 'package:student_lifeline/components/auth/resend_code_button.dart';
+import 'package:student_lifeline/components/auth/submit_button.dart';
+import 'package:student_lifeline/components/auth/text_field.dart';
+import 'package:student_lifeline/components/auth/title_text.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
