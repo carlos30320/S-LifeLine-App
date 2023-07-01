@@ -112,11 +112,10 @@ class _SubscriptionState extends State<Subscription> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: SizedBox(
-                                width: double.infinity,
                                 child: ElevatedButton(
                                   style: const ButtonStyle(
                                       backgroundColor:
-                                          MaterialStatePropertyAll(Colors.red),
+                                          MaterialStatePropertyAll(Colors.blue),
                                       elevation: MaterialStatePropertyAll(0)),
                                   onPressed: () async {
                                     Navigator.of(context).push(
@@ -225,12 +224,12 @@ class _SubscriptionState extends State<Subscription> {
                                       ),
                                     );
                                   },
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 18, bottom: 18),
+                                  child: const Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 18, bottom: 18),
                                       child: Text(
-                                        'Pay with paypal'.toUpperCase(),
-                                        style: const TextStyle(
+                                        'Subscribe with PayPal',
+                                        style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold),
                                       )),
@@ -279,10 +278,14 @@ class _SubscriptionState extends State<Subscription> {
                           ),
                         ),
                   const SizedBox(height: 20.0),
-                  const TextLink(
-                    text: "Go to Sign in.",
-                    link: '/signin',
-                  ),
+                  pay == false
+                      ? const TextLink(
+                          text: "Go to Sign in.",
+                          link: '/signin',
+                        )
+                      : const SizedBox(
+                          height: 0,
+                        )
                 ]),
               ),
             ],
