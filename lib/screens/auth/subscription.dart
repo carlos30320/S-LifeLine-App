@@ -110,7 +110,7 @@ class _SubscriptionState extends State<Subscription> {
                       ? Column(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                               child: SizedBox(
                                 child: ElevatedButton(
                                   style: const ButtonStyle(
@@ -226,9 +226,9 @@ class _SubscriptionState extends State<Subscription> {
                                   },
                                   child: const Padding(
                                       padding:
-                                          EdgeInsets.only(top: 18, bottom: 18),
+                                          EdgeInsets.only(top: 5, bottom: 5),
                                       child: Text(
-                                        'Subscribe with PayPal',
+                                        'Buy with PayPal',
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold),
@@ -243,7 +243,7 @@ class _SubscriptionState extends State<Subscription> {
                                             defaultApplePay),
                                     paymentItems: _paymentItems,
                                     style: ApplePayButtonStyle.black,
-                                    type: ApplePayButtonType.subscribe,
+                                    type: ApplePayButtonType.buy,
                                     margin: const EdgeInsets.only(top: 15.0),
                                     onPaymentResult: onApplePayResult,
                                     loadingIndicator: const Center(
