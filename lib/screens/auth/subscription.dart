@@ -244,7 +244,7 @@ class _SubscriptionState extends State<Subscription> {
                                             defaultApplePay),
                                     paymentItems: _paymentItems,
                                     style: ApplePayButtonStyle.black,
-                                    type: ApplePayButtonType.buy,
+                                    type: ApplePayButtonType.subscribe,
                                     margin: const EdgeInsets.only(top: 15.0),
                                     onPaymentResult: onApplePayResult,
                                     loadingIndicator: const Center(
