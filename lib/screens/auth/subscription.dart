@@ -229,7 +229,7 @@ class _SubscriptionState extends State<Subscription> {
                                   child: const Text(
                                     'Buy with PayPal',
                                     style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 19,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
