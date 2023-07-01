@@ -112,6 +112,8 @@ class _SubscriptionState extends State<Subscription> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: SizedBox(
+                                width: 200,
+                                height: 40,
                                 child: ElevatedButton(
                                   style: const ButtonStyle(
                                       backgroundColor:
@@ -224,15 +226,12 @@ class _SubscriptionState extends State<Subscription> {
                                       ),
                                     );
                                   },
-                                  child: const Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 5, bottom: 5),
-                                      child: Text(
-                                        'Buy with PayPal',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      )),
+                                  child: const Text(
+                                    'Buy with PayPal',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                             ),
@@ -249,8 +248,10 @@ class _SubscriptionState extends State<Subscription> {
                                     loadingIndicator: const Center(
                                       child: CircularProgressIndicator(),
                                     ),
+                                    height: 40,
+                                    width: 200, //
                                   )
-                                : const SizedBox(height: 20.0)
+                                : const SizedBox(height: 0.0)
                           ],
                         )
                       : ClipRRect(
