@@ -36,10 +36,25 @@ class _SubscriptionState extends State<Subscription> {
     )
   ];
 
-  void onApplePayResult(paymentResult) {
-    // Send the resulting Apple Pay token to your server / PSP
-    print("asdfasdf $paymentResult");
+  void onApplePayResult(result) {
+    print('result $result');
+    switch (result.status) {
+      case PaymentStatus.success:
+        // Payment successful, handle further actions
+        print('Payment successful');
+        break;
+      case PaymentStatus.failure:
+        // Payment failed, handle further actions
+        print('Payment failed');
+        break;
+      case PaymentStatus.canceled:
+        // User canceled payment, handle further actions
+        print('Payment canceled by user');
+        break;
+    }
   }
+
+  void onSubScribeOneYear() {}
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +127,7 @@ class _SubscriptionState extends State<Subscription> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: SizedBox(
-                                width: 200,
+                                width: 250,
                                 height: 40,
                                 child: ElevatedButton(
                                   style: const ButtonStyle(
@@ -227,7 +242,7 @@ class _SubscriptionState extends State<Subscription> {
                                     );
                                   },
                                   child: const Text(
-                                    'Buy with PayPal',
+                                    'Subscribe with PayPal',
                                     style: TextStyle(
                                         fontSize: 19,
                                         fontWeight: FontWeight.bold),
@@ -242,14 +257,14 @@ class _SubscriptionState extends State<Subscription> {
                                             defaultApplePay),
                                     paymentItems: _paymentItems,
                                     style: ApplePayButtonStyle.black,
-                                    type: ApplePayButtonType.buy,
+                                    type: ApplePayButtonType.subscribe,
                                     margin: const EdgeInsets.only(top: 15.0),
                                     onPaymentResult: onApplePayResult,
                                     loadingIndicator: const Center(
                                       child: CircularProgressIndicator(),
                                     ),
                                     height: 40,
-                                    width: 200, //
+                                    width: 250, //
                                   )
                                 : const SizedBox(height: 0.0)
                           ],
@@ -295,4 +310,17 @@ class _SubscriptionState extends State<Subscription> {
       ),
     );
   }
+}
+
+enum PaymentStatus {
+  success,
+  failure,
+  canceled,
+}
+
+class ApplePayResult {
+  PaymentStatus status;
+  // any other properties you may need
+
+  ApplePayResult(this.status);
 }
