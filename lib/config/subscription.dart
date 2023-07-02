@@ -1,3 +1,17 @@
+const bool DEVELOPMENT_MODE = false; // false; Production, true: Development
+
+const String SUBSCRIPTION_PRICE = "12";
+const String CURRENCY = "USD";
+
+const String PAYPAL_CLIENT_ID =
+    "AbhLh92-1op95FIi4C3tyP7todnmnUVT8kcye9iQgO4e41GuKi96KFqcNrwrSdxJQmYgttdzZwG4XWac";
+
+const String PAYPAL_SECRET_KEY =
+    "EAxtGFUyfSQytAyer_HegewiRHj6EPN8x2S6Hf-X46J6lgZsT66Trj0fr9Phdt20NdCw529_3CDp6dB6";
+
+const String RETURN_RUL = "https://samplesite.com/return";
+const String CANCEL_URL = "https://samplesite.com/cancel";
+
 /// Copyright 2023 Google LLC
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,144 +41,21 @@
 const String defaultApplePay = '''{
   "provider": "apple_pay",
   "data": {
-    "merchantIdentifier": "merchant.com.sams.fish",
+    "merchantIdentifier": "merchant.com.example.student_lifeline",
     "displayName": "Student LifeLine",
     "merchantCapabilities": ["3DS", "debit", "credit"],
     "supportedNetworks": ["amex", "visa", "discover", "masterCard"],
     "countryCode": "US",
-    "currencyCode": "USD",
+    "currencyCode": $CURRENCY,
     "requiredBillingContactFields": ["emailAddress", "name", "phoneNumber", "postalAddress"],
     "requiredShippingContactFields": [],
     "shippingMethods": [
       {
-        "amount": "0.00",
+        "amount": $SUBSCRIPTION_PRICE,
         "detail": "Available within an hour",
         "identifier": "in_store_pickup",
         "label": "In-Store Pickup"
       }
     ]
-  }
-}''';
-
-/// Sample configuration for Google Pay. Contains the same content as the file
-/// under `assets/default_payment_profile_google_pay.json`.
-const String defaultGooglePay = '''{
-  "provider": "google_pay",
-  "data": {
-    "environment": "TEST",
-    "apiVersion": 2,
-    "apiVersionMinor": 0,
-    "allowedPaymentMethods": [
-      {
-        "type": "CARD",
-        "tokenizationSpecification": {
-          "type": "PAYMENT_GATEWAY",
-          "parameters": {
-            "gateway": "example",
-            "gatewayMerchantId": "gatewayMerchantId"
-          }
-        },
-        "parameters": {
-          "allowedCardNetworks": ["VISA", "MASTERCARD"],
-          "allowedAuthMethods": ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-          "billingAddressRequired": true,
-          "billingAddressParameters": {
-            "format": "FULL",
-            "phoneNumberRequired": true
-          }
-        }
-      }
-    ],
-    "merchantInfo": {
-      "merchantId": "01234567890123456789",
-      "merchantName": "Example Merchant Name"
-    },
-    "transactionInfo": {
-      "countryCode": "US",
-      "currencyCode": "USD"
-    }
-  }
-}''';
-
-const String basicGooglePayIsReadyToPay = '''{
-  "apiVersion": 2,
-  "apiVersionMinor": 0,
-  "allowedPaymentMethods": [
-    {
-      "type": "CARD",
-      "parameters": {
-        "allowedAuthMethods": ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-        "allowedCardNetworks": ["AMEX", "DISCOVER", "INTERAC", "JCB", "MASTERCARD", "VISA"]
-      }
-    }
-  ]
-}''';
-
-const String basicGooglePayLoadPaymentData = '''{
-  "apiVersion": 2,
-  "apiVersionMinor": 0,
-  "merchantInfo": {
-    "merchantName": "Example Merchant"
-  },
-  "allowedPaymentMethods": [
-    {
-      "type": "CARD",
-      "parameters": {
-        "allowedAuthMethods": ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-        "allowedCardNetworks": ["AMEX", "DISCOVER", "INTERAC", "JCB", "MASTERCARD", "VISA"]
-      },
-      "tokenizationSpecification": {
-        "type": "PAYMENT_GATEWAY",
-        "parameters": {
-          "gateway": "example",
-          "gatewayMerchantId": "exampleGatewayMerchantId"
-        }
-      }
-    }
-  ],
-  "transactionInfo": {
-    "totalPriceStatus": "FINAL",
-    "totalPrice": "12.34",
-    "currencyCode": "USD"
-  }
-}''';
-
-const String invalidGooglePayIsReadyToPay = '''{
-  "apiVersion": 2,
-  "apiVersionMinor": 0,
-  "allowedPaymentMethods": [
-    {
-      "type": "CARD",
-      "parameters": {}
-    }
-  ]
-}''';
-
-const String invalidGooglePayLoadPaymentData = '''{
-  "apiVersion": 2,
-  "apiVersionMinor": 0,
-  "merchantInfo": {
-    "merchantName": "Example Merchant"
-  },
-  "allowedPaymentMethods": [
-    {
-      "type": "CARD",
-      "parameters": {
-        "allowedAuthMethods": ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-        "allowedCardNetworks": ["AMEX", "DISCOVER", "INTERAC", "JCB", "MASTERCARD", "VISA"]
-      },
-      "tokenizationSpecification": {
-        "type": "PAYMENT_GATEWAY",
-        "parameters": {
-          "gateway": "example",
-          "gatewayMerchantId": "exampleGatewayMerchantId"
-        }
-      }
-    }
-  ],
-  "transactionInfo": {
-    "totalPriceStatus": "FINAL",
-    "totalPrice": "12.34",
-    "currencyCode": "USD"
   }
 }''';

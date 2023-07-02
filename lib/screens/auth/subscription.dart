@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:student_lifeline/components/auth/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_lifeline/components/logo.dart';
@@ -32,30 +32,36 @@ class _SubscriptionState extends State<Subscription> {
   static const _paymentItems = [
     PaymentItem(
       label: 'Total',
-      amount: '12',
+      amount: SUBSCRIPTION_PRICE,
       status: PaymentItemStatus.final_price,
     )
   ];
 
   void onApplePayResult(result) {
-    print('result $result');
-    switch (result.status) {
-      case PaymentStatus.success:
-        // Payment successful, handle further actions
-        print('Payment successful');
-        break;
-      case PaymentStatus.failure:
-        // Payment failed, handle further actions
-        print('Payment failed');
-        break;
-      case PaymentStatus.canceled:
-        // User canceled payment, handle further actions
-        print('Payment canceled by user');
-        break;
+    if (kDebugMode) {
+      print('result $result');
     }
+    onSubScribeOneYear();
   }
 
-  void onSubScribeOneYear() {}
+  void onSubScribeOneYear() async {
+    Response res = await ApiClient.subscribeForAYear();
+
+    if (res.success == true) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isActivated', true);
+
+      showToast("Payment done", status: ToastStatus.success);
+
+      setState(() {
+        pay = true;
+      });
+    } else {
+      (res.message?.isNotEmpty == true)
+          ? showToast(res.message!, status: ToastStatus.error)
+          : null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +112,7 @@ class _SubscriptionState extends State<Subscription> {
                   ),
                   pay == false
                       ? Text(
-                          '''Subscribe to one of America's most efficient. and reasonably priced Emergency Alert Systems that can save a loved one from the worry of being alone when in trouble, without a means to reach out to those who care most for their well being and safety, only \$12.00USD a year, instantly alerts up to three contacts simultaneously...subscribe below: ''',
+                          '''Subscribe to one of America's most efficient. and reasonably priced Emergency Alert Systems that can save a loved one from the worry of being alone when in trouble, without a means to reach out to those who care most for their well being and safety, only \$$SUBSCRIPTION_PRICE $CURRENCY a year, instantly alerts up to three contacts simultaneously...subscribe below: ''',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 16,
@@ -140,27 +146,25 @@ class _SubscriptionState extends State<Subscription> {
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             UsePaypal(
-                                                sandboxMode: true,
-                                                clientId:
-                                                    "AbhLh92-1op95FIi4C3tyP7todnmnUVT8kcye9iQgO4e41GuKi96KFqcNrwrSdxJQmYgttdzZwG4XWac",
-                                                secretKey:
-                                                    "EAxtGFUyfSQytAyer_HegewiRHj6EPN8x2S6Hf-X46J6lgZsT66Trj0fr9Phdt20NdCw529_3CDp6dB6",
-                                                returnURL:
-                                                    "https://samplesite.com/return",
-                                                cancelURL:
-                                                    "https://samplesite.com/cancel",
+                                                sandboxMode: DEVELOPMENT_MODE,
+                                                clientId: PAYPAL_CLIENT_ID,
+                                                secretKey: PAYPAL_SECRET_KEY,
+                                                returnURL: RETURN_RUL,
+                                                cancelURL: CANCEL_URL,
                                                 transactions: const [
                                                   {
                                                     "amount": {
-                                                      "total": '12',
-                                                      "currency": "USD",
+                                                      "total":
+                                                          SUBSCRIPTION_PRICE,
+                                                      "currency": CURRENCY,
                                                       "details": {
-                                                        "subtotal": '12',
+                                                        "subtotal":
+                                                            SUBSCRIPTION_PRICE,
                                                         "shipping": '0',
                                                         "shipping_discount": 0
                                                       }
                                                     },
-                                                    "Student LifeLine Subscription":
+                                                    "description":
                                                         "Payment for Student LifeLine Subscription.",
                                                     "item_list": {
                                                       "items": [
@@ -168,8 +172,9 @@ class _SubscriptionState extends State<Subscription> {
                                                           "name":
                                                               "Student LifeLine",
                                                           "quantity": 1,
-                                                          "price": '12',
-                                                          "currency": "USD"
+                                                          "price":
+                                                              SUBSCRIPTION_PRICE,
+                                                          "currency": CURRENCY
                                                         }
                                                       ],
                                                     }
@@ -178,27 +183,7 @@ class _SubscriptionState extends State<Subscription> {
                                                 note:
                                                     "Contact us for any questions on your order.",
                                                 onSuccess: (Map params) async {
-                                                  Response res = await ApiClient
-                                                      .subscribeForAYear();
-
-                                                  if (res.success == true) {
-                                                    SharedPreferences prefs =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    prefs.setBool(
-                                                        'isActivated', true);
-
-                                                    Fluttertoast.showToast(
-                                                        msg: "Payment done");
-
-                                                    setState(() {
-                                                      pay = true;
-                                                    });
-                                                  } else {
-                                                    showToast(res.message,
-                                                        status:
-                                                            ToastStatus.error);
-                                                  }
+                                                  onSubScribeOneYear();
                                                 },
                                                 onError: (error) {
                                                   showToast(
@@ -283,17 +268,4 @@ class _SubscriptionState extends State<Subscription> {
       ),
     );
   }
-}
-
-enum PaymentStatus {
-  success,
-  failure,
-  canceled,
-}
-
-class ApplePayResult {
-  PaymentStatus status;
-  // any other properties you may need
-
-  ApplePayResult(this.status);
 }
