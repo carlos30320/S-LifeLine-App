@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_lifeline/components/logo.dart';
 import 'package:pay/pay.dart';
 import 'package:student_lifeline/config/subscription.dart';
+import 'package:student_lifeline/utils/toast.dart';
 import 'dart:io';
 
 import '../../utils/api.dart';
@@ -194,49 +195,21 @@ class _SubscriptionState extends State<Subscription> {
                                                       pay = true;
                                                     });
                                                   } else {
-                                                    Fluttertoast.showToast(
-                                                        msg: res.message
-                                                            .toString(),
-                                                        toastLength:
-                                                            Toast.LENGTH_LONG,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        timeInSecForIosWeb: 1,
-                                                        backgroundColor:
-                                                            Colors.red.shade900,
-                                                        textColor: Colors.white,
-                                                        fontSize: 14.0);
+                                                    showToast(res.message,
+                                                        status:
+                                                            ToastStatus.error);
                                                   }
                                                 },
                                                 onError: (error) {
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          "Something went wrong"
-                                                              .toString(),
-                                                      toastLength:
-                                                          Toast.LENGTH_LONG,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 1,
-                                                      backgroundColor:
-                                                          Colors.red.shade900,
-                                                      textColor: Colors.white,
-                                                      fontSize: 14.0);
-                                                  print("onError: $error");
+                                                  showToast(
+                                                      "Something went wrong",
+                                                      status:
+                                                          ToastStatus.error);
                                                 },
                                                 onCancel: (params) {
-                                                  Fluttertoast.showToast(
-                                                      msg: "Action cancelled"
-                                                          .toString(),
-                                                      toastLength:
-                                                          Toast.LENGTH_LONG,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 1,
-                                                      backgroundColor:
-                                                          Colors.red.shade900,
-                                                      textColor: Colors.white,
-                                                      fontSize: 14.0);
+                                                  showToast("Action cancelled",
+                                                      status:
+                                                          ToastStatus.warning);
                                                 }),
                                       ),
                                     );
