@@ -8,7 +8,7 @@
 PRODUCT_NAME = Student Lifeline;
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.studentlifeline.student_lifeline;
+PRODUCT_BUNDLE_IDENTIFIER = com.studentlifeline.studentlifeline;
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.

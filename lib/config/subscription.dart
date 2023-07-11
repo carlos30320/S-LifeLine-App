@@ -41,8 +41,8 @@ const String CANCEL_URL = "https://samplesite.com/cancel";
 const String defaultApplePay = '''{
   "provider": "apple_pay",
   "data": {
-    "merchantIdentifier": "merchant.com.example.student_lifeline",
-    "displayName": "Student LifeLine",
+    "merchantIdentifier": "merchant.com.studentlifeline.student_lifeline",
+    "displayName": "Student Lifeline",
     "merchantCapabilities": ["3DS", "debit", "credit"],
     "supportedNetworks": ["amex", "visa", "discover", "masterCard"],
     "countryCode": "US",
