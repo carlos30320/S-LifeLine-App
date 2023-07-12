@@ -41,17 +41,17 @@ const String CANCEL_URL = "https://samplesite.com/cancel";
 const String defaultApplePay = '''{
   "provider": "apple_pay",
   "data": {
-    "merchantIdentifier": "merchant.com.studentlifeline.student_lifeline",
+    "merchantIdentifier": "merchant.com.studentlifeline.studentlifeline",
     "displayName": "Student Lifeline",
     "merchantCapabilities": ["3DS", "debit", "credit"],
     "supportedNetworks": ["amex", "visa", "discover", "masterCard"],
     "countryCode": "US",
-    "currencyCode": $CURRENCY,
+    "currencyCode": "$CURRENCY",
     "requiredBillingContactFields": ["emailAddress", "name", "phoneNumber", "postalAddress"],
     "requiredShippingContactFields": [],
     "shippingMethods": [
       {
-        "amount": $SUBSCRIPTION_PRICE,
+        "amount": "$SUBSCRIPTION_PRICE",
         "detail": "Available within an hour",
         "identifier": "in_store_pickup",
         "label": "In-Store Pickup"
