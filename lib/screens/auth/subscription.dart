@@ -218,6 +218,13 @@ class _SubscriptionState extends State<Subscription> {
                                     type: ApplePayButtonType.subscribe,
                                     margin: const EdgeInsets.only(top: 15.0),
                                     onPaymentResult: onApplePayResult,
+                                    onError: (error) {
+                                      showToast("Something went wrong",
+                                          status: ToastStatus.error);
+                                      if (kDebugMode) {
+                                        print(error);
+                                      }
+                                    },
                                     loadingIndicator: const Center(
                                       child: CircularProgressIndicator(),
                                     ),
