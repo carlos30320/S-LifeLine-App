@@ -1,17 +1,17 @@
-import 'package:student_lifeline/components/logo.dart';
-import 'package:student_lifeline/utils/api.dart';
-import 'package:student_lifeline/utils/factories.dart';
+import 'package:studentlifeline/components/logo.dart';
+import 'package:studentlifeline/utils/api.dart';
+import 'package:studentlifeline/utils/factories.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:student_lifeline/utils/toast.dart';
-import 'package:student_lifeline/components/auth/text_field.dart';
-import 'package:student_lifeline/components/auth/submit_button.dart';
-import 'package:student_lifeline/components/auth/title_text.dart';
-import 'package:student_lifeline/components/auth/errors.dart';
-import 'package:student_lifeline/components/auth/text_link.dart';
-import 'package:student_lifeline/components/auth/resend_code_button.dart';
+import 'package:studentlifeline/utils/toast.dart';
+import 'package:studentlifeline/components/auth/text_field.dart';
+import 'package:studentlifeline/components/auth/submit_button.dart';
+import 'package:studentlifeline/components/auth/title_text.dart';
+import 'package:studentlifeline/components/auth/errors.dart';
+import 'package:studentlifeline/components/auth/text_link.dart';
+import 'package:studentlifeline/components/auth/resend_code_button.dart';
 
 class EnterCodeScreen extends StatefulWidget {
   const EnterCodeScreen({super.key});

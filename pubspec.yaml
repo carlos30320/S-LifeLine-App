@@ -1,4 +1,4 @@
-name: student_lifeline
+name: studentlifeline
 description: A new Flutter project.
 
 version: 1.0.0+1
@@ -12,7 +12,6 @@ dependencies:
   carousel_slider: ^4.2.1
   geolocator: ^9.0.2
   cupertino_icons: ^1.0.2
-  # google_fonts: ^5.0.0
   shared_preferences: ^2.1.1
   intl_phone_number_input: ^0.7.3
   intl:

@@ -1,4 +1,4 @@
-import 'package:student_lifeline/components/logo.dart';
+import 'package:studentlifeline/components/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';

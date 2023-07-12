@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
-import 'package:student_lifeline/components/auth/text_link.dart';
+import 'package:studentlifeline/components/auth/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:student_lifeline/components/logo.dart';
+import 'package:studentlifeline/components/logo.dart';
 import 'package:pay/pay.dart';
-import 'package:student_lifeline/config/subscription.dart';
-import 'package:student_lifeline/utils/toast.dart';
+import 'package:studentlifeline/config/subscription.dart';
+import 'package:studentlifeline/utils/toast.dart';
 import 'dart:io';
 
 import '../../utils/api.dart';

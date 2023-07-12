@@ -1,8 +1,8 @@
-import 'package:student_lifeline/components/contact.dart';
-import 'package:student_lifeline/layout/common_scaffold.dart';
-import 'package:student_lifeline/utils/api.dart';
-import 'package:student_lifeline/utils/factories.dart';
-import 'package:student_lifeline/utils/toast.dart';
+import 'package:studentlifeline/components/contact.dart';
+import 'package:studentlifeline/layout/common_scaffold.dart';
+import 'package:studentlifeline/utils/api.dart';
+import 'package:studentlifeline/utils/factories.dart';
+import 'package:studentlifeline/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart'

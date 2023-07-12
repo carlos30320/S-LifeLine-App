@@ -1,4 +1,4 @@
-import 'package:student_lifeline/utils/factories.dart';
+import 'package:studentlifeline/utils/factories.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
