@@ -4,10 +4,10 @@ const String SUBSCRIPTION_PRICE = "12";
 const String CURRENCY = "USD";
 
 const String PAYPAL_CLIENT_ID =
-    "AbhLh92-1op95FIi4C3tyP7todnmnUVT8kcye9iQgO4e41GuKi96KFqcNrwrSdxJQmYgttdzZwG4XWac";
+    "AQGAdH5SRRR9uQ8Z7EG_HX7pUHo--izR7tNL1l5Qm-ktSxhkkssYp_kBdZN8ZlRU72umj-kv761Hv_O-";
 
 const String PAYPAL_SECRET_KEY =
-    "EAxtGFUyfSQytAyer_HegewiRHj6EPN8x2S6Hf-X46J6lgZsT66Trj0fr9Phdt20NdCw529_3CDp6dB6";
+    "EEVU_iYb2qjcFICNdy0BQHfO2xgL-ZG-W9hlni_E3JNrllXx-I2z8znOPMqTSw9EtzqhCl7pKzcJuah4";
 
 const String RETURN_RUL = "https://samplesite.com/return";
 const String CANCEL_URL = "https://samplesite.com/cancel";
