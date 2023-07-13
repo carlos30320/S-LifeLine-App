@@ -208,6 +208,7 @@ class _SubscriptionState extends State<Subscription> {
                                 ),
                               ),
                             ),
+                            Platform.
                             Platform.isIOS
                                 ? ApplePayButton(
                                     paymentConfiguration:
